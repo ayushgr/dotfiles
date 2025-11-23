@@ -1,3 +1,10 @@
 README.md
-repo_init.sh
 .githooks
+
+repo_init.sh
+osx_init.sh
+
+itermconfigs/itermguide
+
+# Local zsh customizations (not version controlled)
+.zshrc.local
