@@ -6,6 +6,11 @@ brew install chezmoi
 
 # run chezmoi
 
+# Install devtools
+brew install hl
+brew install rg
+brew install jq
+
 # install firemono nerd font for terminal
 
 # Install terminal
