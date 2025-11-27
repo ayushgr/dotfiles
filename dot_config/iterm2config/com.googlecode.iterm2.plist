@@ -10,6 +10,8 @@
 	<string>gpt-5.1</string>
 	<key>AllowInteractiveSwipeBetweenTabs</key>
 	<true/>
+	<key>AlternateMouseScroll</key>
+	<true/>
 	<key>Custom Color Presets</key>
 	<dict>
 		<key>Monokai Soda</key>
