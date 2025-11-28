@@ -1,0 +1,11 @@
+# exa
+# Overwrite oh-my-zsh defaults https://github.com/ohmyzsh/ohmyzsh/blob/master/lib/directories.zsh
+# List directory contents
+abbr lsa='eza -abghl'
+abbr la='eza -abghl'
+abbr l='eza -abghl'
+abbr ll='eza -bghl'
+abbr ls='eza'
+
+# bat
+abbr cat='bat'
