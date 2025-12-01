@@ -24,3 +24,5 @@ antidote load
 if [[ -f ~/.zshrc.local ]]; then
     source ~/.zshrc.local
 fi
+
+source <(fzf --zsh)
