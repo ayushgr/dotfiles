@@ -2,6 +2,10 @@
 
 My Dotfiles.
 
+# Structural Rules
+1. All aliases are set in .zshrc
+1. All abbreviations are set in zsh-abbr/private_user-abbreviations
+
 ## Setup Instructions
 1. Install Homebrew
 1. brew install chezmoi

@@ -9,3 +9,6 @@ abbr ls='eza'
 
 # bat
 abbr cat='bat'
+
+# fd
+abbr find='fd'
