@@ -13,4 +13,5 @@ My Dotfiles.
 1. chezmoi cd
 1. ./repo_init.sh
 1. ./osx_init.sh
+1. ./language_init.sh
 1. chezmoi apply

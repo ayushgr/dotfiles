@@ -1,8 +1,11 @@
 README.md
 .githooks
 
+*_init.sh
 repo_init.sh
 osx_init.sh
+
+sync_*.sh
 sync_iterm.sh
 
 itermconfigs/itermguide
