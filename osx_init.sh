@@ -29,17 +29,13 @@ brew install gh # github
 # Install Terminal Core - fonts, zsh, terminal app
 brew install font-fira-mono-nerd-font # Font
 brew install antidote # Zsh Plugin Manager - Oh-My-Zsh but faster and simpler
-brew install --cask iterm2 # Terminal App
-# Specify the preferences directory
-defaults write com.googlecode.iterm2.plist PrefsCustomFolder -string "~/.config/iterm2config"
-# Tell iTerm2 to use the custom preferences in the directory
-defaults write com.googlecode.iterm2.plist LoadPrefsFromCustomFolder -bool true
+brew install --cask ghostty@tip # Ghostty Preleases
 
 # Install Applications
 brew install --cask claude-code
 # Todo Alt-Tab + Config
 # Todo Flux
-# Todo Superwhisper
+# Todo Superwhisper/VoiceInk
 # Todo Slack
 # Todo VSCode OR Cursor
 brew install --cask raycast # TODO - Setup ConfigFiles
