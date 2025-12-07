@@ -1,0 +1,36 @@
+{
+  "powerModeConfigs" : [
+
+  ],
+  "generalSettings" : {
+    "isPauseMediaEnabled" : false,
+    "transcriptionRetentionMinutes" : 0,
+    "launchAtLoginEnabled" : true,
+    "isSoundFeedbackEnabled" : true,
+    "isAudioCleanupEnabled" : false,
+    "recorderType" : "mini",
+    "useAppleScriptPaste" : false,
+    "selectedHotkey1RawValue" : "custom",
+    "isSystemMuteEnabled" : true,
+    "isExperimentalFeaturesEnabled" : false,
+    "selectedHotkey2RawValue" : "none",
+    "isTranscriptionCleanupEnabled" : false,
+    "audioRetentionPeriod" : 0,
+    "toggleMiniRecorderShortcut" : {
+      "carbonModifiers" : 2048,
+      "carbonKeyCode" : 49
+    },
+    "isMenuBarOnly" : false,
+    "isTextFormattingEnabled" : true
+  },
+  "version" : "1.64",
+  "customPrompts" : [
+
+  ],
+  "customEmojis" : [
+
+  ],
+  "customCloudModels" : [
+
+  ]
+}

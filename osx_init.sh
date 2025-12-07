@@ -4,8 +4,13 @@
 # brew install chezmoi
 
 ### OSX Settings and Manual Actions
-
-# OSX Settings -> Keyboard -> Shortcuts -> Services -> Text -> Disable Super+C Chinese # TODO - Figure out osx script command
+# MAYBE-TODO - Figure out osx script command. Defaults is complex. Likely not worth the time
+# OSX Settings -> Enable Secondary Click
+# OSX Settings -> Change fn key to ctrl
+# OSX Settings -> Keyboard -> Shortcuts -> Services -> Text -> Disable Super+C Chinese 
+# Make Dock Smaller + Autohide + On the Left
+# Finder -> Add Home Dir to Favorites
+# Menu Bar -> Always show volume
 
 # Disable Window Opening Animation -> From https://nikitabobko.github.io/AeroSpace/goodies#highlight-focused-windows-with-colored-borders
 defaults write -g NSAutomaticWindowAnimationsEnabled -bool false
@@ -33,18 +38,34 @@ brew install --cask ghostty@tip # Ghostty Preleases
 
 # Install Applications
 brew install --cask claude-code
-# Todo Alt-Tab + Config
-# Todo Flux
-# Todo Superwhisper/VoiceInk
-# Todo Slack
-# Todo VSCode OR Cursor
-brew install --cask raycast # TODO - Setup ConfigFiles
+brew install --cask flux-app
 
-# Manual Installs
+brew install --cask alt-tab
+# After Settings Changes, Re-Export and Sync to Chezmoi
+# defaults export com.lwouis.alt-tab-macos ~/.config/com.lwouis.alt-tab-macos.plist
+defaults import com.lwouis.alt-tab-macos ~/.config/com.lwouis.alt-tab-macos.plist
+
+brew install --cask raycast
+# Import Config File
+
+# Todo VSCode OR Cursor
+
+### Manual Installs
 brew install --cask bettertouchtool # Do Auth + Load Default.bttpreset
+
 # BTT Inspiration -> https://old.reddit.com/r/MacOS/comments/1cytw1p/whats_your_bettertouchtool_setup/
-# BetterTouchTool -> Do Email Auth/Login
+# BetterTouchTool -> Do Email Auth/Login -> Import BTT File
+
 # Magic Switch -> Download File Again
+
+# VoiceInk -> Grab and Set Key From Gist/ENV -> Import Config -> Install Parakeet v3
+brew install --cask voiceink
+
+# Slack -> Initialize Logins + Nocturne Theme
+brew install --cask slack
+
+# Flux
+brew install --cask flux-app
 
 #####################################################################
 

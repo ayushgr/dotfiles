@@ -1,10 +1,10 @@
 font-family = "FiraMono Nerd Font Mono Regular"
 
 theme = Monokai Soda
-background-opacity = .85
+background-opacity = .80
 background-blur = false
-# TODO - Revisit Divider Color
-split-divider-color = #615e4b
+split-divider-color = #454336
+# TODO - Figure out unfocused-split-opacity, unfocused-split-fill, cursor coloring
 
 window-step-resize = true
 confirm-close-surface = false
@@ -16,8 +16,6 @@ macos-custom-icon = ~/.config/ghostty/ghostty-cafe-espresso.icns
 
 auto-update = download
 
-# TODO - Set up Quick Terminal?
-# keybind = ctrl+a>n=new_window
 keybind = global:shift+opt+cmd+ctrl+`=toggle_quick_terminal
 quick-terminal-animation-duration = 0
 
@@ -26,7 +24,7 @@ keybind = shift+enter=text:\n
 
 # https://github.com/KroneCorylus/ghostty-shader-playground
 # From https://github.com/sahaj-b/ghostty-cursor-shaders
-custom-shader = cursor_sweep.glsl
+custom-shader = shaders/cursor_sweep.glsl
 
 # TODO - Figure out selections using keyboard with zsh
 # https://github.com/ghostty-org/ghostty/discussions/3142#discussioncomment-11818669
