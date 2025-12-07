@@ -42,6 +42,7 @@ brew install --cask flux-app
 
 brew install --cask alt-tab
 # After Settings Changes, Re-Export and Sync to Chezmoi
+# May have to still change Animation Setting to 0 false false
 # defaults export com.lwouis.alt-tab-macos ~/.config/com.lwouis.alt-tab-macos.plist
 defaults import com.lwouis.alt-tab-macos ~/.config/com.lwouis.alt-tab-macos.plist
 
