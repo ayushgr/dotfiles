@@ -1,7 +1,7 @@
 font-family = "FiraMono Nerd Font Mono Regular"
 
 theme = Monokai Soda
-background-opacity = .80
+background-opacity = .90
 background-blur = false
 split-divider-color = #454336
 # TODO - Figure out unfocused-split-opacity, unfocused-split-fill, cursor coloring

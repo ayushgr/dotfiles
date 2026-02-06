@@ -39,6 +39,7 @@ brew install --cask ghostty@tip # Ghostty Preleases
 # Install Applications
 brew install --cask claude-code
 brew install --cask flux-app
+brew install --cask jordanbaird-ice
 
 brew install --cask alt-tab
 # After Settings Changes, Re-Export and Sync to Chezmoi
@@ -64,9 +65,6 @@ brew install --cask voiceink
 
 # Slack -> Initialize Logins + Nocturne Theme
 brew install --cask slack
-
-# Flux
-brew install --cask flux-app
 
 #####################################################################
 
