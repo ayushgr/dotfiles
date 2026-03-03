@@ -28,6 +28,13 @@ brew install procs # alternative to ps
 brew install fzf # fuzzy finder
 brew install bottom # Improved Activity Monitor
 
+# Tmux
+brew install tmux # Terminal Multiplexer
+brew install tmuxinator # Tmux session template create. Consider tmuxp
+brew install sesh # Tmux session manager
+git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
+
+
 # Install terminal apps
 brew install gh # github
 

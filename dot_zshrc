@@ -49,6 +49,10 @@ antidote load
   alias cd="z"
 ###
 
+### Tmux aliases
+  alias tm="tmux attach || tmux"
+###
+
 # Source local zshrc if it exists
 # This allows for local customizations that aren't version controlled
 if [[ -f ~/.zshrc.local ]]; then
