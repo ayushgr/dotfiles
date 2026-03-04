@@ -1,0 +1,2 @@
+# Only purpose of this is for tmux using latest bash from homebrew
+export PATH="/opt/homebrew/bin:$PATH"

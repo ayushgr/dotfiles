@@ -29,11 +29,12 @@ brew install fzf # fuzzy finder
 brew install bottom # Improved Activity Monitor
 
 # Tmux
+brew install bash # need latest version for plugins and tpm
 brew install tmux # Terminal Multiplexer
 brew install tmuxinator # Tmux session template create. Consider tmuxp
 brew install sesh # Tmux session manager
 git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
-
+# Run tmux and then prefix + shift + i to install plugins
 
 # Install terminal apps
 brew install gh # github
