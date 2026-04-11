@@ -14,7 +14,7 @@ confirm-close-surface = false
 macos-titlebar-style = tabs
 macos-option-as-alt = true
 macos-icon = custom
-macos-custom-icon = ~/.config/ghostty/ghostty-cafe-espresso.icns
+macos-custom-icon = ~/.config/ghostty/kanagawa-dragon.icns
 
 auto-update = download
 
