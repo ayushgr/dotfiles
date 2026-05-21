@@ -53,6 +53,7 @@ if [[ "$OS" == "Darwin" ]]; then
   # Applications
   brew install --cask flux-app
   brew install --cask jordanbaird-ice  # Menu bar manager
+  brew install --cask tablepro # RDBMS Query Tool
 
   brew install --cask alt-tab
   # After Settings Changes, Re-Export and Sync to Chezmoi
