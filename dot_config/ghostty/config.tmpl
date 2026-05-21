@@ -11,10 +11,12 @@ window-decoration = none
 window-step-resize = true
 confirm-close-surface = false
 
+{{- if eq .chezmoi.os "darwin" }}
 macos-titlebar-style = tabs
 macos-option-as-alt = true
 macos-icon = custom
 macos-custom-icon = ~/.config/ghostty/kanagawa-dragon.icns
+{{- end }}
 
 auto-update = download
 
