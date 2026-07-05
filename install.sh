@@ -137,6 +137,11 @@ fi
 
 # ── Cross-platform ─────────────────────────────────────────────────────────────
 
+# Herdr - terminal multiplexer + agent runtime
+if ! command -v herdr &>/dev/null; then
+  curl -fsSL https://herdr.dev/install.sh | sh
+fi
+
 # TPM - Tmux Plugin Manager
 if [[ ! -d "$HOME/.config/tmux/plugins/tpm" ]]; then
   git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
