@@ -71,7 +71,7 @@ sidebar_width = 32
 
 agent_panel_sort = "spaces"
 [ui.toast]
-delivery = "terminal"
+delivery = "herdr"
 
 # ── Session ───────────────────────────────────────────────────────────────────
 

@@ -8,7 +8,12 @@ split-divider-color = #454336
 
 window-decoration = none
 
-window-step-resize = true
+fullscreen = non-native
+window-padding-x = 0
+window-padding-y = 0
+window-padding-balance = false
+
+window-step-resize = false
 confirm-close-surface = false
 
 macos-titlebar-style = tabs
@@ -62,6 +67,8 @@ keybind = shift+enter=text:\n
 # https://github.com/KroneCorylus/ghostty-shader-playground
 # From https://github.com/sahaj-b/ghostty-cursor-shaders
 custom-shader = shaders/cursor_sweep.glsl
+
+bell-features = no-system,no-audio,attention,title,border
 
 # TODO - Figure out selections using keyboard with zsh
 # https://github.com/ghostty-org/ghostty/discussions/3142#discussioncomment-11818669

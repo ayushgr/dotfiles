@@ -1,0 +1,10 @@
+id = "ayushgr.auto-focus-idle"
+name = "Auto-focus Idle Agent"
+version = "0.1.0"
+min_herdr_version = "0.6.10"
+description = "Flash terminal bell and switch to an agent pane when it goes idle"
+platforms = ["macos", "linux"]
+
+[[events]]
+on = "pane.agent_status_changed"
+command = ["bash", "/Users/ayushgr/.config/herdr/plugins/auto-focus-idle/on-agent-status.sh"]

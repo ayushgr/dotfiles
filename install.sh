@@ -142,6 +142,10 @@ if ! command -v herdr &>/dev/null; then
   curl -fsSL https://herdr.dev/install.sh | sh
 fi
 
+# Herdr plugins
+chmod +x ~/.config/herdr/plugins/auto-focus-idle/on-agent-status.sh
+herdr plugin link ~/.config/herdr/plugins/auto-focus-idle 2>/dev/null || true
+
 # TPM - Tmux Plugin Manager
 if [[ ! -d "$HOME/.config/tmux/plugins/tpm" ]]; then
   git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
