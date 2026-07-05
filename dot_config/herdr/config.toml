@@ -1,0 +1,83 @@
+onboarding = false
+
+
+
+# ── Terminal ──────────────────────────────────────────────────────────────────
+
+[terminal]
+default_shell = "zsh"
+shell_mode = "auto"
+new_cwd = "follow"          # new panes open in current pane's directory
+
+# ── Keybindings ───────────────────────────────────────────────────────────────
+
+[keys]
+prefix = "ctrl+a"           # matches tmux prefix (C-a)
+switch_workspace = "prefix+1..9"  # cmd+1-9 → switch spaces
+
+# Splits — triggered via ghostty cmd+d / cmd+shift+d → C-a v / C-a -
+split_vertical   = ["prefix+v", "ctrl+alt+d"]
+split_horizontal = ["prefix+minus", "ctrl+alt+shift+d"]
+
+# Pane cycling — triggered via ghostty cmd+] / cmd+[ → C-a ] / C-a [
+cycle_pane_next     = ["prefix+]", "ctrl+alt+]"]
+cycle_pane_previous = ["prefix+[", "ctrl+alt+["]
+
+# Directional pane focus (prefix only)
+focus_pane_left  = "prefix+h"
+focus_pane_right = "prefix+l"
+focus_pane_up    = "prefix+k"
+focus_pane_down  = "prefix+j"
+
+# Zoom — triggered via ghostty cmd+z → C-a z
+zoom = ["prefix+z", "ctrl+alt+z"]
+
+# Jump to the agent that last pinged/notified
+open_notification_target = "prefix+a"
+
+# ── Theme ─────────────────────────────────────────────────────────────────────
+
+[theme]
+# Flexoki Dark isn't a built-in; kanagawa is the closest warm/dark alternative
+name = "kanagawa"
+
+[theme.custom]
+panel_bg = "reset"          # transparent — inherits ghostty's background-opacity 0.93
+surface0    = "#1C1B1A"     # Flexoki bg
+surface1    = "#282726"     # Flexoki bg-2
+surface_dim = "#343331"     # Flexoki ui
+overlay0    = "#878580"     # Flexoki tx-2 (brighter — counters DIM on agent labels)
+overlay1    = "#575653"     # Flexoki ui-3
+text        = "#B7B5AC"     # Flexoki tx
+subtext0    = "#CECDC3"     # Flexoki base-200 (near-white — bright agent labels)
+accent      = "#4385BE"     # Flexoki blue-400
+blue        = "#4385BE"     # Flexoki blue-400
+teal        = "#3AA99F"     # Flexoki cyan-400
+green       = "#879A39"     # Flexoki green-400
+yellow      = "#D0A215"     # Flexoki yellow-400
+peach       = "#DA702C"     # Flexoki orange-400
+red         = "#D14D41"     # Flexoki red-400
+mauve       = "#8B7EC8"     # Flexoki purple-400
+
+# ── UI ────────────────────────────────────────────────────────────────────────
+
+[ui]
+mouse_capture = true        # matches tmux: set -g mouse on
+confirm_close = false       # matches ghostty: confirm-close-surface = false
+pane_borders = false
+pane_gaps = false
+sidebar_width = 32
+
+agent_panel_sort = "spaces"
+[ui.toast]
+delivery = "terminal"
+
+# ── Session ───────────────────────────────────────────────────────────────────
+
+[session]
+resume_agents_on_restore = true   # equivalent to tmux-continuum auto-restore
+
+# ── Advanced ──────────────────────────────────────────────────────────────────
+
+[advanced]
+scrollback_limit_bytes = 52428800  # ~50 MB ≈ tmux history-limit 50000

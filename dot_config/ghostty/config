@@ -11,12 +11,10 @@ window-decoration = none
 window-step-resize = true
 confirm-close-surface = false
 
-{{- if eq .chezmoi.os "darwin" }}
 macos-titlebar-style = tabs
 macos-option-as-alt = true
 macos-icon = custom
 macos-custom-icon = ~/.config/ghostty/kanagawa-dragon.icns
-{{- end }}
 
 auto-update = download
 
@@ -33,12 +31,12 @@ keybind = cmd+t=text:\x01c
 keybind = cmd+w=text:\x01\x78
 
 # Pane splitting
-keybind = cmd+d=text:\x01%
-keybind = cmd+shift+d=text:\x01"
+keybind = cmd+d=text:\x01v
+keybind = cmd+shift+d=text:\x01-
 
-# Pane Cycling
-keybind = cmd+[=text:\x01O
-keybind = cmd+]=text:\x01P
+# Pane cycling
+keybind = cmd+[=text:\x01[
+keybind = cmd+]=text:\x01]
 
 # Window Cycling
 keybind = ctrl+tab=text:\x01\x6e
@@ -56,7 +54,7 @@ keybind = cmd+digit_8=text:\x01\x38
 keybind = cmd+digit_9=text:\x01\x39
 
 # Zoom/fullscreen pane
-keybind = cmd+z=text:\x02z
+keybind = cmd+z=text:\x01z
 
 # shift + enter newline
 keybind = shift+enter=text:\n
