@@ -1,7 +1,7 @@
 font-family = "FiraMono Nerd Font Mono Regular"
 
 theme = Flexoki Dark
-background-opacity = .93
+background-opacity = .98
 background-blur = false
 split-divider-color = #454336
 # TODO - Figure out unfocused-split-opacity, unfocused-split-fill, cursor coloring
@@ -11,6 +11,8 @@ window-decoration = none
 fullscreen = non-native
 window-padding-x = 0
 window-padding-y = 0
+window-width = 9999
+window-height = 9999
 window-padding-balance = false
 
 window-step-resize = false
