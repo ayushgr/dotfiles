@@ -8,11 +8,11 @@ split-divider-color = #454336
 
 window-decoration = none
 
-fullscreen = non-native
+# fullscreen = non-native
 window-padding-x = 0
 window-padding-y = 0
-window-width = 9999
-window-height = 9999
+# window-width = 9999
+# window-height = 9999
 window-padding-balance = false
 
 window-step-resize = false
