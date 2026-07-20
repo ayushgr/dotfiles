@@ -14,7 +14,6 @@ sync_*.sh
 dot_bash_profile
 dot_config/Default.bttpreset
 "dot_config/Raycast 2025-12-07 11.38.31.rayconfig"
-dot_config/VoiceInk_Settings_Backup.json
 dot_config/private_com.lwouis.alt-tab-macos.plist
 dot_config/ghostty/kanagawa-dragon.icns
 {{ end }}

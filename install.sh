@@ -73,8 +73,7 @@ if [[ "$OS" == "Darwin" ]]; then
 
   # Magic Switch -> Download File Again
 
-  # VoiceInk -> Grab and Set Key From Gist/ENV -> Import Config -> Install Parakeet v3
-  brew install --cask voiceink
+  brew install --cask handy
 
   brew install --cask slack
   # Slack -> Initialize Logins + Nocturne Theme
@@ -130,7 +129,6 @@ elif [[ "$OS" == "Linux" ]]; then
   # alt-tab          -> no equivalent; use your WM's built-in alt-tab
   # raycast          -> no equivalent; use rofi or albert: paru -S rofi
   # bettertouchtool  -> no equivalent (macOS input remapper)
-  # voiceink         -> no equivalent
   # defaults (macOS system settings CLI) -> not available
 
 fi
