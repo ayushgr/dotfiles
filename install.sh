@@ -4,136 +4,80 @@ set -euo pipefail
 # Install homebrew - Assuming installed outside of script
 # /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 # Install chezmoi - Assuming installed outside of script
-# macOS:  brew install chezmoi
-# Arch:   paru -S chezmoi
+# brew install chezmoi
 
-OS="$(uname -s)"
+### OSX Settings and Manual Actions
+# MAYBE-TODO - Figure out osx script command. Defaults is complex. Likely not worth the time
+# OSX Settings -> Enable Secondary Click
+# OSX Settings -> Change fn key to ctrl
+# OSX Settings -> Keyboard -> Shortcuts -> Services -> Text -> Disable Super+C Chinese
+# Make Dock Smaller + Autohide + On the Left
+# Finder -> Add Home Dir to Favorites
+# Menu Bar -> Always show volume
 
-# ── macOS ──────────────────────────────────────────────────────────────────────
-if [[ "$OS" == "Darwin" ]]; then
+# Disable Window Opening Animation -> From https://nikitabobko.github.io/AeroSpace/goodies#highlight-focused-windows-with-colored-borders
+defaults write -g NSAutomaticWindowAnimationsEnabled -bool false
 
-  ### OSX Settings and Manual Actions
-  # MAYBE-TODO - Figure out osx script command. Defaults is complex. Likely not worth the time
-  # OSX Settings -> Enable Secondary Click
-  # OSX Settings -> Change fn key to ctrl
-  # OSX Settings -> Keyboard -> Shortcuts -> Services -> Text -> Disable Super+C Chinese
-  # Make Dock Smaller + Autohide + On the Left
-  # Finder -> Add Home Dir to Favorites
-  # Menu Bar -> Always show volume
+# Terminal utilities
+brew install eza          # Improved ls
+brew install bat          # Improved cat
+brew install hl           # Log parsing and viewing
+brew install ripgrep      # Better grep replacement
+brew install jq           # JSON parsing
+brew install fd           # Better find replacement
+brew install zoxide       # Better cd replacement
+brew install procs        # Alternative to ps
+brew install fzf          # Fuzzy finder
+brew install bottom       # Improved Activity Monitor
 
-  # Disable Window Opening Animation -> From https://nikitabobko.github.io/AeroSpace/goodies#highlight-focused-windows-with-colored-borders
-  defaults write -g NSAutomaticWindowAnimationsEnabled -bool false
+# Tmux
+brew install bash         # Need latest version for plugins and tpm
+brew install tmux
+brew install tmuxinator   # Tmux session template creator. Consider tmuxp
+brew install sesh         # Tmux session manager
 
-  # Terminal utilities
-  brew install eza          # Improved ls
-  brew install bat          # Improved cat
-  brew install hl           # Log parsing and viewing
-  brew install ripgrep      # Better grep replacement
-  brew install jq           # JSON parsing
-  brew install fd           # Better find replacement
-  brew install zoxide       # Better cd replacement
-  brew install procs        # Alternative to ps
-  brew install fzf          # Fuzzy finder
-  brew install bottom       # Improved Activity Monitor
+# Terminal apps
+brew install gh           # GitHub CLI
 
-  # Tmux
-  brew install bash         # Need latest version for plugins and tpm
-  brew install tmux
-  brew install tmuxinator   # Tmux session template creator. Consider tmuxp
-  brew install sesh         # Tmux session manager
+# Terminal core - fonts, zsh, terminal app
+brew install font-fira-mono-nerd-font
+brew install antidote     # Zsh plugin manager - Oh-My-Zsh but faster and simpler
+brew install --cask ghostty@tip
 
-  # Terminal apps
-  brew install gh           # GitHub CLI
+# Applications
+brew install --cask flux-app
+brew install --cask jordanbaird-ice  # Menu bar manager
+brew install --cask tablepro # RDBMS Query Tool
 
-  # Terminal core - fonts, zsh, terminal app
-  brew install font-fira-mono-nerd-font
-  brew install antidote     # Zsh plugin manager - Oh-My-Zsh but faster and simpler
-  brew install --cask ghostty@tip
+brew install --cask alt-tab
+# After Settings Changes, Re-Export and Sync to Chezmoi
+# May have to still change Animation Setting to 0 false false
+# defaults export com.lwouis.alt-tab-macos ~/.config/com.lwouis.alt-tab-macos.plist
+defaults import com.lwouis.alt-tab-macos ~/.config/com.lwouis.alt-tab-macos.plist
 
-  # Applications
-  brew install --cask flux-app
-  brew install --cask jordanbaird-ice  # Menu bar manager
-  brew install --cask tablepro # RDBMS Query Tool
+brew install --cask raycast
+# Import Config File
 
-  brew install --cask alt-tab
-  # After Settings Changes, Re-Export and Sync to Chezmoi
-  # May have to still change Animation Setting to 0 false false
-  # defaults export com.lwouis.alt-tab-macos ~/.config/com.lwouis.alt-tab-macos.plist
-  defaults import com.lwouis.alt-tab-macos ~/.config/com.lwouis.alt-tab-macos.plist
+# Todo VSCode OR Cursor
 
-  brew install --cask raycast
-  # Import Config File
+### Manual Installs
+brew install --cask bettertouchtool  # Do Auth + Load Default.bttpreset
+# BTT Inspiration -> https://old.reddit.com/r/MacOS/comments/1cytw1p/whats_your_bettertouchtool_setup/
+# BetterTouchTool -> Do Email Auth/Login -> Import BTT File
 
-  # Todo VSCode OR Cursor
+# Magic Switch -> Download File Again
 
-  ### Manual Installs
-  brew install --cask bettertouchtool  # Do Auth + Load Default.bttpreset
-  # BTT Inspiration -> https://old.reddit.com/r/MacOS/comments/1cytw1p/whats_your_bettertouchtool_setup/
-  # BetterTouchTool -> Do Email Auth/Login -> Import BTT File
+brew install --cask handy
 
-  # Magic Switch -> Download File Again
+brew install --cask slack
+# Slack -> Initialize Logins + Nocturne Theme
 
-  brew install --cask handy
-
-  brew install --cask slack
-  # Slack -> Initialize Logins + Nocturne Theme
-
-  ###########################################################################
-  # If needed per device
-  # brew install --cask amphetamine
-  # brew install --cask dropbox
-  # brew install --cask vlc
-  # brew install --cask mpv
-
-# ── Linux (Arch) ───────────────────────────────────────────────────────────────
-elif [[ "$OS" == "Linux" ]]; then
-
-  # Terminal utilities
-  paru -S --needed \
-    eza \
-    bat \
-    hl \
-    ripgrep \
-    jq \
-    fd \
-    zoxide \
-    procs \
-    fzf \
-    bottom
-
-  # Tmux
-  paru -S --needed \
-    tmux \
-    tmuxinator \
-    sesh
-
-  # Terminal apps
-  paru -S --needed \
-    github-cli
-
-  # Terminal core - fonts, zsh, terminal app
-  paru -S --needed \
-    ttf-firacode-nerd \
-    ghostty
-
-  # Antidote - not in official repos, clone manually
-  if [[ ! -d "${ZDOTDIR:-$HOME}/.antidote" ]]; then
-    git clone --depth=1 https://github.com/mattmc3/antidote.git "${ZDOTDIR:-$HOME}/.antidote"
-  fi
-
-  paru -S --needed slack-desktop
-
-  ### NOT AVAILABLE ON LINUX (macOS-only):
-  # flux-app         -> use redshift or gammastep: paru -S gammastep
-  # jordanbaird-ice  -> no equivalent (macOS menu bar manager)
-  # alt-tab          -> no equivalent; use your WM's built-in alt-tab
-  # raycast          -> no equivalent; use rofi or albert: paru -S rofi
-  # bettertouchtool  -> no equivalent (macOS input remapper)
-  # defaults (macOS system settings CLI) -> not available
-
-fi
-
-# ── Cross-platform ─────────────────────────────────────────────────────────────
+###########################################################################
+# If needed per device
+# brew install --cask amphetamine
+# brew install --cask dropbox
+# brew install --cask vlc
+# brew install --cask mpv
 
 # Herdr - terminal multiplexer + agent runtime
 if ! command -v herdr &>/dev/null; then

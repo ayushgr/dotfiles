@@ -8,12 +8,3 @@ sync_*.sh
 
 # Local zsh customizations (not version controlled)
 .zshrc.local
-
-{{ if ne .chezmoi.os "darwin" }}
-# macOS-only files
-dot_bash_profile
-dot_config/Default.bttpreset
-"dot_config/Raycast 2025-12-07 11.38.31.rayconfig"
-dot_config/private_com.lwouis.alt-tab-macos.plist
-dot_config/ghostty/kanagawa-dragon.icns
-{{ end }}
