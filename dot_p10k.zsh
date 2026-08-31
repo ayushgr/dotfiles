@@ -481,7 +481,12 @@
   # sagging, try setting POWERLEVEL9K_VCS_MAX_INDEX_SIZE_DIRTY to a number lower than the output
   # of `git ls-files | wc -l`. Alternatively, add `bash.showDirtyState = false` to the repository's
   # config: `git config bash.showDirtyState false`.
-  typeset -g POWERLEVEL9K_VCS_MAX_INDEX_SIZE_DIRTY=-1
+  # Set to 0: never compute dirty state at all. my_git_formatter above renders
+  # only the branch name -- every counter block in it is commented out -- so
+  # scanning the index for staged/unstaged/untracked files is pure waste. This
+  # scan is what made prompt latency scale with repo size (35ms - 121ms across
+  # ~/repos); with it off, the git segment costs the same everywhere.
+  typeset -g POWERLEVEL9K_VCS_MAX_INDEX_SIZE_DIRTY=0
 
   # Don't show Git status in prompt for repositories whose workdir matches this pattern.
   # For example, if set to '~', the Git repository at $HOME/.git will be ignored.
@@ -493,8 +498,10 @@
   # Install our own Git status formatter.
   typeset -g POWERLEVEL9K_VCS_CONTENT_EXPANSION='${$((my_git_formatter(1)))+${my_git_format}}'
   typeset -g POWERLEVEL9K_VCS_LOADING_CONTENT_EXPANSION='${$((my_git_formatter(0)))+${my_git_format}}'
-  # Enable counters for staged, unstaged, etc.
-  typeset -g POWERLEVEL9K_VCS_{STAGED,UNSTAGED,UNTRACKED,CONFLICTED,COMMITS_AHEAD,COMMITS_BEHIND}_MAX_NUM=-1
+  # Dirty-file counters disabled (0), avoiding scans whose results the formatter
+  # discards. Ahead/behind values are only clamped after gitstatus computes them;
+  # zero still documents that the formatter does not consume these values.
+  typeset -g POWERLEVEL9K_VCS_{STAGED,UNSTAGED,UNTRACKED,CONFLICTED,COMMITS_AHEAD,COMMITS_BEHIND}_MAX_NUM=0
 
   # Icon color.
   typeset -g POWERLEVEL9K_VCS_VISUAL_IDENTIFIER_COLOR=1

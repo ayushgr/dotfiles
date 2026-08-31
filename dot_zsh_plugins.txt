@@ -3,18 +3,20 @@ zsh-users/zsh-autosuggestions
 zsh-users/zsh-syntax-highlighting
 zsh-users/zsh-completions
 
-# Oh-my-zsh dependency management
-getantidote/use-omz
-
-# Make Zsh more featureful
-# Git status is faster
-# History and other enhancements
-# See: https://github.com/ohmyzsh/ohmyzsh/tree/master/lib
+# Oh-my-zsh library.
+#
+# NOTE: the getantidote/use-omz shim is deliberately NOT used. It cost ~79ms per
+# shell (including a `git rev-parse` fork on every startup) purely to provide an
+# oh-my-zsh-compatible environment. The lib files below need almost none of it --
+# only $ZSH_CACHE_DIR and omz_urlencode, both handled in .zshrc.
+#
+# The oh-my-zsh plugins/git and plugins/bundler were also dropped: between them
+# they defined 220 aliases, of which 3 had ever been used (and those 3 are
+# already overridden in ~/.config/zsh-abbr/user-abbreviations).
+#
+# .zshrc filters this bundle down to the lib files actually wanted; see the
+# regeneration block there for the explicit allowlist.
 ohmyzsh/ohmyzsh path:lib
-
-# Oh-my-zsh plugins
-ohmyzsh/ohmyzsh path:plugins/git
-ohmyzsh/ohmyzsh path:plugins/bundler
 
 # Powerlevel 10k
 romkatv/powerlevel10k
