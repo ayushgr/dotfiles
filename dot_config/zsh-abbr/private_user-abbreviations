@@ -12,3 +12,6 @@ abbr cat='bat'
 
 # fd
 abbr find='fd'
+
+# zoxide -- abbreviation rather than alias so non-interactive shells (agents, scripts) keep the real cd
+abbr cd='z'

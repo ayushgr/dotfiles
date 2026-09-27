@@ -41,7 +41,7 @@ brew install gh           # GitHub CLI
 
 # Terminal core - fonts, zsh, terminal app
 brew install font-fira-mono-nerd-font
-brew install antidote     # Zsh plugin manager - Oh-My-Zsh but faster and simpler
+brew install antidote     # Zsh plugin manager. `antidote update` updates plugins (incl. oh-my-zsh lib); `brew upgrade` updates antidote
 brew install --cask ghostty@tip
 
 # Applications
@@ -85,7 +85,6 @@ if ! command -v herdr &>/dev/null; then
 fi
 
 # Herdr plugins
-chmod +x ~/.config/herdr/plugins/auto-focus-idle/on-agent-status.sh
 herdr plugin link ~/.config/herdr/plugins/auto-focus-idle 2>/dev/null || true
 
 # TPM - Tmux Plugin Manager
