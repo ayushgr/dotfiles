@@ -42,7 +42,7 @@ open_notification_target = "prefix+a"
 name = "kanagawa"
 
 [theme.custom]
-panel_bg = "reset"          # transparent — inherits ghostty's background-opacity 0.93
+panel_bg = "reset"          # transparent — inherits ghostty's background-opacity
 surface0    = "#1C1B1A"     # Flexoki bg
 surface1    = "#282726"     # Flexoki bg-2
 surface_dim = "#343331"     # Flexoki ui

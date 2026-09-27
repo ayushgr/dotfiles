@@ -44,10 +44,10 @@ brew install --cask jordanbaird-ice  # Menu bar manager
 brew install --cask tablepro # RDBMS Query Tool
 
 brew install --cask alt-tab
-# After Settings Changes, Re-Export and Sync to Chezmoi
+# After settings changes, re-export, then `chezmoi re-add` to sync it back
 # May have to still change Animation Setting to 0 false false
-# defaults export com.lwouis.alt-tab-macos ~/.config/com.lwouis.alt-tab-macos.plist
-defaults import com.lwouis.alt-tab-macos ~/.config/com.lwouis.alt-tab-macos.plist
+# defaults export com.lwouis.alt-tab-macos ~/.config/imports/com.lwouis.alt-tab-macos.plist
+defaults import com.lwouis.alt-tab-macos ~/.config/imports/com.lwouis.alt-tab-macos.plist
 
 brew install --cask raycast
 # Raycast -> Settings -> Advanced -> Import ~/.config/imports/raycast.rayconfig
@@ -55,9 +55,6 @@ brew install --cask raycast
 # Todo VSCode OR Cursor
 
 ### Manual Installs
-brew install --cask bettertouchtool
-# BTT Inspiration -> https://old.reddit.com/r/MacOS/comments/1cytw1p/whats_your_bettertouchtool_setup/
-# BetterTouchTool -> Do Email Auth/Login
 
 # Magic Switch -> Download File Again
 

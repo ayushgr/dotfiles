@@ -1,7 +1,7 @@
 #!/bin/zsh
-# Core zsh configuration
-# This file is managed by chezmoi
-# Local customizations should go in ~/.zshrc.local
+# Interactive shell setup: prompt, plugins, completions, aliases, keybindings.
+# Managed by chezmoi. PATH and environment live in .zprofile.
+# Device-specific interactive setup goes in ~/.zshrc.local.
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
@@ -9,8 +9,6 @@
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
-
-export PATH="/opt/homebrew/bin:$HOME/.local/bin:$PATH"
 
 # oh-my-zsh lib files write here
 export ZSH_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
@@ -45,16 +43,9 @@ antidote load
   }
 ###
 
-### Set up bat
-  export BAT_THEME="Monokai Extended Origin"
-###
 
-
-# Source local zshrc if it exists
-# This allows for local customizations that aren't version controlled
-if [[ -f ~/.zshrc.local ]]; then
-    source ~/.zshrc.local
-fi
+# Device-specific interactive setup. Not version controlled.
+[[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
 
 ### Set up zoxide
 # Must stay at the very end: zoxide warns if anything reconfigures the shell after it.

@@ -3,7 +3,6 @@ AGENTS.md
 
 install.sh
 
-sync_*.sh
-
-# Local zsh customizations (not version controlled)
+# Device-specific shell files (not version controlled)
+.zprofile.local
 .zshrc.local

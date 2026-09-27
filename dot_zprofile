@@ -1,0 +1,11 @@
+# Login shell environment: PATH and exported variables. Runs once per terminal
+# window/tab, before .zshrc; child shells (agents, scripts) inherit the result.
+# Interactive-only setup (prompt, plugins, aliases) belongs in .zshrc.
+
+typeset -U path  # keep PATH entries unique when login shells nest
+
+eval "$(/opt/homebrew/bin/brew shellenv)"
+path=("$HOME/.local/bin" $path)
+
+# Device-specific environment (work PATH, tokens, etc.). Not version controlled.
+[[ -f ~/.zprofile.local ]] && source ~/.zprofile.local
