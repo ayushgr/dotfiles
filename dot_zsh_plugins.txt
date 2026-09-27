@@ -19,12 +19,12 @@ ohmyzsh/ohmyzsh path:lib/termsupport.zsh
 # Powerlevel 10k
 romkatv/powerlevel10k path:powerlevel10k.zsh-theme
 
-# Zsh Abbreviations
-olets/zsh-abbr
-
-# Tab completion through fzf. Must load before the widget-wrapping plugins below.
+# Tab completion through fzf. Loaded eagerly: fzf's `**` completion (sourced in
+# .zshrc) captures the Tab binding at startup and falls back to fzf-tab.
 Aloxaf/fzf-tab
 
-# Load last: these wrap widgets defined by everything above
-zsh-users/zsh-autosuggestions
-zsh-users/zsh-syntax-highlighting
+# Deferred (kind:defer): loaded by zsh-defer right after the first prompt appears,
+# since they only matter once you type. Order is preserved; highlighting stays last.
+olets/zsh-abbr kind:defer
+zsh-users/zsh-autosuggestions kind:defer
+zsh-users/zsh-syntax-highlighting kind:defer

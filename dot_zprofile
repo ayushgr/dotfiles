@@ -2,10 +2,13 @@
 # window/tab, before .zshrc; child shells (agents, scripts) inherit the result.
 # Interactive-only setup (prompt, plugins, aliases) belongs in .zshrc.
 
-typeset -U path  # keep PATH entries unique when login shells nest
+typeset -U path fpath  # keep entries unique when login shells nest
 
-eval "$(/opt/homebrew/bin/brew shellenv)"
-path=("$HOME/.local/bin" $path)
+# What `brew shellenv` prints, written out: running brew costs ~13ms per new tab.
+export HOMEBREW_PREFIX=/opt/homebrew HOMEBREW_CELLAR=/opt/homebrew/Cellar HOMEBREW_REPOSITORY=/opt/homebrew
+export INFOPATH="/opt/homebrew/share/info:${INFOPATH:-}"
+path=("$HOME/.local/bin" /opt/homebrew/bin /opt/homebrew/sbin $path)
+fpath=(/opt/homebrew/share/zsh/site-functions $fpath)
 
 # Colored man pages via bat
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"

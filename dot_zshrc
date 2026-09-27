@@ -20,11 +20,18 @@ zstyle ':plugin:ez-compinit' 'use-cache' yes
 
 # Suggest from history first, then from what tab completion would offer.
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+# Bind autosuggest widgets once instead of before every prompt (~9ms per prompt).
+# Safe because every widget-defining plugin loads before the first prompt.
+ZSH_AUTOSUGGEST_MANUAL_REBIND=1
 
-# Load zsh plugins with antidote (installed via Homebrew; path hardcoded to skip `brew --prefix`).
-# `antidote load` regenerates its static bundle only when .zsh_plugins.txt changes.
-source /opt/homebrew/opt/antidote/share/antidote/antidote.zsh
-antidote load
+# Load zsh plugins from a static bundle, regenerated only when .zsh_plugins.txt changes.
+# antidote itself is autoloaded: none of it runs at startup, and `antidote update` etc.
+# load it on first use. See https://github.com/mattmc3/antidote#performance
+fpath=(/opt/homebrew/opt/antidote/share/antidote/functions $fpath)
+autoload -Uz antidote
+zsh_plugins=${ZDOTDIR:-$HOME}/.zsh_plugins
+[[ $zsh_plugins.zsh -nt $zsh_plugins.txt ]] || antidote bundle <$zsh_plugins.txt >|$zsh_plugins.zsh
+source $zsh_plugins.zsh
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
