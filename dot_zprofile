@@ -7,5 +7,12 @@ typeset -U path  # keep PATH entries unique when login shells nest
 eval "$(/opt/homebrew/bin/brew shellenv)"
 path=("$HOME/.local/bin" $path)
 
+# Colored man pages via bat
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+
+# git diff/log/show through delta. Git only pages when output is a terminal,
+# so agents and scripts still get plain git output.
+export GIT_PAGER="delta --syntax-theme='Monokai Extended Origin'"
+
 # Device-specific environment (work PATH, tokens, etc.). Not version controlled.
 [[ -f ~/.zprofile.local ]] && source ~/.zprofile.local

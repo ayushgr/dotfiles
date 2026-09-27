@@ -29,6 +29,8 @@ brew install zoxide       # Better cd replacement
 brew install procs        # Alternative to ps
 brew install fzf          # Fuzzy finder
 brew install bottom       # Improved Activity Monitor
+brew install hyperfine    # Command benchmarking (e.g. `hyperfine 'zsh -i -c exit'`)
+brew install git-delta    # Syntax-highlighted git diffs (GIT_PAGER in .zprofile)
 
 # Terminal apps
 brew install gh           # GitHub CLI

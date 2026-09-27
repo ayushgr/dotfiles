@@ -3,6 +3,8 @@
 abbr ls='eza'
 # long list incl. hidden files: icons, dirs first, git status, relative dates, no user/group
 abbr lsa='eza -la --icons=auto --group-directories-first --git --no-user --time-style=relative'
+# tree view, 2 levels, respecting .gitignore
+abbr lst='eza --tree --level=2 --icons=auto --git-ignore'
 
 # bat
 abbr cat='bat'

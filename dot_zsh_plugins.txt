@@ -22,6 +22,9 @@ romkatv/powerlevel10k path:powerlevel10k.zsh-theme
 # Zsh Abbreviations
 olets/zsh-abbr
 
+# Tab completion through fzf. Must load before the widget-wrapping plugins below.
+Aloxaf/fzf-tab
+
 # Load last: these wrap widgets defined by everything above
 zsh-users/zsh-autosuggestions
 zsh-users/zsh-syntax-highlighting

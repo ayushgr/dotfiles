@@ -14,6 +14,13 @@ fi
 export ZSH_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
 [[ -d $ZSH_CACHE_DIR ]] || mkdir -p $ZSH_CACHE_DIR
 
+# Completion cache: skip compinit's full scan (~25ms/shell) and rebuild at most every
+# 20 hours. After installing a tool, run `run-compinit -f` to pick up its completions now.
+zstyle ':plugin:ez-compinit' 'use-cache' yes
+
+# Suggest from history first, then from what tab completion would offer.
+ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+
 # Load zsh plugins with antidote (installed via Homebrew; path hardcoded to skip `brew --prefix`).
 # `antidote load` regenerates its static bundle only when .zsh_plugins.txt changes.
 source /opt/homebrew/opt/antidote/share/antidote/antidote.zsh
@@ -41,6 +48,13 @@ antidote load
   _fzf_compgen_dir() {
     fd --type=d --hidden --exclude .git . "$1"
   }
+###
+
+### Set up fzf-tab (tab completion menu via fzf)
+  zstyle ':completion:*:*:*:*:*' menu no               # replaces oh-my-zsh's select menu
+  zstyle ':completion:*:descriptions' format '[%d]'    # group headers; switch groups with < >
+  zstyle ':fzf-tab:*' switch-group '<' '>'
+  zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always --icons=always $realpath'
 ###
 
 
