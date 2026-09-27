@@ -28,7 +28,7 @@ auto-update = download
 keybind = global:shift+opt+cmd+ctrl+`=toggle_quick_terminal
 quick-terminal-animation-duration = 0
 
-# tmux command+a to enter super mode
+# cmd+a sends the herdr prefix (C-a); the keybinds below send C-a sequences
 keybind = cmd+a=text:\x01
 
 # Window creation

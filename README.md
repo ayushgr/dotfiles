@@ -13,8 +13,6 @@ My Dotfiles. Managed with [chezmoi](https://www.chezmoi.io/). macOS only.
 1. `chezmoi init https://github.com/ayushgr/dotfiles.git`
 1. `chezmoi apply`
 1. `./install.sh`
-1. `./language_init.sh`
 
 ## Scripts
 - `install.sh` — installs packages and apps via Homebrew
-- `language_init.sh` — sets up language toolchains (Rust, etc.)

@@ -49,10 +49,6 @@ antidote load
   export BAT_THEME="Monokai Extended Origin"
 ###
 
-### Tmux aliases
-  alias tm="tmux attach || tmux"
-###
-
 
 # Source local zshrc if it exists
 # This allows for local customizations that aren't version controlled

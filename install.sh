@@ -30,12 +30,6 @@ brew install procs        # Alternative to ps
 brew install fzf          # Fuzzy finder
 brew install bottom       # Improved Activity Monitor
 
-# Tmux
-brew install bash         # Need latest version for plugins and tpm
-brew install tmux
-brew install tmuxinator   # Tmux session template creator. Consider tmuxp
-brew install sesh         # Tmux session manager
-
 # Terminal apps
 brew install gh           # GitHub CLI
 
@@ -56,14 +50,14 @@ brew install --cask alt-tab
 defaults import com.lwouis.alt-tab-macos ~/.config/com.lwouis.alt-tab-macos.plist
 
 brew install --cask raycast
-# Import Config File
+# Raycast -> Settings -> Advanced -> Import ~/.config/imports/raycast.rayconfig
 
 # Todo VSCode OR Cursor
 
 ### Manual Installs
-brew install --cask bettertouchtool  # Do Auth + Load Default.bttpreset
+brew install --cask bettertouchtool
 # BTT Inspiration -> https://old.reddit.com/r/MacOS/comments/1cytw1p/whats_your_bettertouchtool_setup/
-# BetterTouchTool -> Do Email Auth/Login -> Import BTT File
+# BetterTouchTool -> Do Email Auth/Login
 
 # Magic Switch -> Download File Again
 
@@ -86,12 +80,6 @@ fi
 
 # Herdr plugins
 herdr plugin link ~/.config/herdr/plugins/auto-focus-idle 2>/dev/null || true
-
-# TPM - Tmux Plugin Manager
-if [[ ! -d "$HOME/.config/tmux/plugins/tpm" ]]; then
-  git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
-fi
-# Run tmux and then prefix + shift + i to install plugins
 
 #####################################################################
 # Consider new Tools
