@@ -38,6 +38,7 @@ These `.local` files are never version controlled.
 ## Working in this repo
 
 - Edit files here (the chezmoi source), then `chezmoi diff` and `chezmoi apply`.
+- Before applying on a device, run `chezmoi diff` and ask the user about any local changes before proceeding. Use `chezmoi apply --error-on-conflict` so apply never prompts.
 - If `chezmoi apply` says a target "has changed since chezmoi last wrote it", run `chezmoi diff <target>` first. Installers often append lines (PATH exports) to `~/.zshrc` or `~/.zprofile`; move those into the matching `.local` file (or drop them), then `chezmoi apply --force <target>`.
 - chezmoi does not delete a target when its source file is removed. When deleting a file from the repo, delete the deployed copy too, and list it in the commit message so other devices can do the same.
 - Commit messages that need follow-up on other devices include a "Steps for other devices" section.
