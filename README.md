@@ -47,6 +47,14 @@ One palette drives the colors of Ghostty, herdr and Zed, and through Ghostty's A
 - Claude Code's own UI is its built-in dark or light preset, chosen by the active theme's `appearance`, plus what `dot_claude/themes/dotfiles.json.tmpl` overrides with ANSI slots (its warning color). Select `Dotfiles` in `/theme` once per device.
 - Zed's `settings.json` is not managed here (Zed rewrites it). Set its theme to `Dotfiles` once per device.
 
+## Claude Code mods
+
+Mods change Claude Code's own interface. Each is a folder in `dot_claude/mods/<name>/` and is loaded by listing its deployed path in `CLAUDE_CODE_PLUGIN_DIRS` in `.zprofile` (colon-separated).
+
+- `turn-stats` replaces the `(shift+tab to cycle)` hint under the prompt with the session's model time and tool calls, e.g. `4 min · 80 tools`.
+- Check a mod after editing with `claude plugin validate <folder>` and `claude plugin test <folder>`, then apply. A running session reloads the deployed folder on change; new terminals pick up changes to the variable.
+- Claude writes `tsconfig.json` and `.claude-plugin/types/` into the deployed folder. They are generated and not tracked here.
+
 ## Working in this repo
 
 - Edit files here (the chezmoi source), then `chezmoi diff` and `chezmoi apply`.

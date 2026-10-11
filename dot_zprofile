@@ -17,5 +17,8 @@ export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 # so agents and scripts still get plain git output.
 export GIT_PAGER="delta --syntax-theme=base16"
 
+# Claude Code mods (see README). Colon-separated; each folder is loaded as a plugin.
+export CLAUDE_CODE_PLUGIN_DIRS="$HOME/.claude/mods/turn-stats"
+
 # Device-specific environment (work PATH, tokens, etc.). Not version controlled.
 [[ -f ~/.zprofile.local ]] && source ~/.zprofile.local

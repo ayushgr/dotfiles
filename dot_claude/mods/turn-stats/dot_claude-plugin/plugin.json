@@ -1,0 +1,1 @@
+{ "name": "turn-stats", "version": "0.1.0", "description": "Replaces \"(shift+tab to cycle)\" under the prompt with the session's model time and tool calls", "types": "./types/index.d.ts" }
