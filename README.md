@@ -35,6 +35,18 @@ These `.local` files are never version controlled.
 1. Zsh plugins are listed in `.zsh_plugins.txt` and loaded by antidote. Update them with `antidote update`.
 1. Files that are imported manually into apps (not read from `~/.config` at runtime) live in `dot_config/imports/`.
 
+## Themes
+
+One palette drives the colors of Ghostty, herdr and Zed, and through Ghostty's ANSI palette everything that runs in the terminal (prompt, Claude status line, bat, delta, fzf, eza).
+
+- A theme is a palette file in `.chezmoidata/themes/<name>.toml`: an `appearance` (`dark` or `light`) plus the same set of color slots in every theme. To add a theme, copy an existing file and change the name in its `[themes.<name>]` header.
+- The default theme is the name in `.chezmoidata/theme.toml`. Each device can override it in `.chezmoidata/theme_local.toml`, which is not version controlled.
+- `./theme.sh <name>` switches: it writes `.chezmoidata/theme_local.toml`, applies the generated files and reloads Ghostty and herdr. `./theme.sh` alone picks from a list, previewing each theme as it is highlighted. Like `install.sh`, the script stays in this repo and is not deployed, so run it from here (`chezmoi cd`).
+- The generated files are templates that read the active palette: `dot_config/ghostty/themes/current.tmpl`, `dot_config/herdr/config.toml.tmpl`, `dot_config/zed/themes/dotfiles.json.tmpl` and `dot_claude/themes/dotfiles.json.tmpl`. Apps point at these fixed names, so a switch only changes file contents.
+- Terminal programs must use ANSI colors 0-15 only, never 256-color indices or hex values, or they stop following the theme.
+- Claude Code's own UI is its built-in dark or light preset, chosen by the active theme's `appearance`, plus what `dot_claude/themes/dotfiles.json.tmpl` overrides with ANSI slots (its warning color). Select `Dotfiles` in `/theme` once per device.
+- Zed's `settings.json` is not managed here (Zed rewrites it). Set its theme to `Dotfiles` once per device.
+
 ## Working in this repo
 
 - Edit files here (the chezmoi source), then `chezmoi diff` and `chezmoi apply`.

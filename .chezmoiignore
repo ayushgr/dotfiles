@@ -2,6 +2,7 @@ README.md
 AGENTS.md
 
 install.sh
+theme.sh
 
 # Device-specific shell files (not version controlled)
 .zprofile.local

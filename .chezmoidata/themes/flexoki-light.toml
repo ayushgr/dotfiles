@@ -1,0 +1,36 @@
+# Flexoki Light — https://stephango.com/flexoki
+[themes.flexoki-light]
+appearance = "light"
+
+# Surfaces, from the main background up to the strongest border.
+bg   = "#FFFCF0"
+bg_2 = "#F2F0E5"
+ui   = "#E6E4D9"
+ui_2 = "#DAD8CE"
+ui_3 = "#CECDC3"
+
+# Text, from faint to primary.
+tx_3 = "#B7B5AC"
+tx_2 = "#6F6E69"
+tx   = "#100F0F"
+
+accent = "#205EA6"
+
+# Accents. The plain name is the one that reads best on bg; _2 is the
+# secondary shade (the "bright" ANSI slot in terminals).
+red       = "#AF3029"
+red_2     = "#D14D41"
+orange    = "#BC5215"
+orange_2  = "#DA702C"
+yellow    = "#AD8301"
+yellow_2  = "#D0A215"
+green     = "#66800B"
+green_2   = "#879A39"
+cyan      = "#24837B"
+cyan_2    = "#3AA99F"
+blue      = "#205EA6"
+blue_2    = "#4385BE"
+purple    = "#5E409D"
+purple_2  = "#8B7EC8"
+magenta   = "#A02F6F"
+magenta_2 = "#CE5D97"

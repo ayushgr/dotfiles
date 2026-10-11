@@ -1,0 +1,36 @@
+# Gruvbox Dark — https://github.com/morhetz/gruvbox
+[themes.gruvbox-dark]
+appearance = "dark"
+
+# Surfaces, from the main background up to the strongest border.
+bg   = "#282828"
+bg_2 = "#32302F"
+ui   = "#3C3836"
+ui_2 = "#504945"
+ui_3 = "#665C54"
+
+# Text, from faint to primary.
+tx_3 = "#928374"
+tx_2 = "#A89984"
+tx   = "#EBDBB2"
+
+accent = "#FE8019"
+
+# Accents. The plain name is the one that reads best on bg; _2 is the
+# secondary shade (the "bright" ANSI slot in terminals).
+red       = "#FB4934"
+red_2     = "#CC241D"
+orange    = "#FE8019"
+orange_2  = "#D65D0E"
+yellow    = "#FABD2F"
+yellow_2  = "#D79921"
+green     = "#B8BB26"
+green_2   = "#98971A"
+cyan      = "#8EC07C"
+cyan_2    = "#689D6A"
+blue      = "#83A598"
+blue_2    = "#458588"
+purple    = "#D3869B"
+purple_2  = "#B16286"
+magenta   = "#D3869B"
+magenta_2 = "#B16286"

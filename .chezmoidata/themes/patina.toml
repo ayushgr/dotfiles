@@ -1,0 +1,39 @@
+# Patina — from Ghostty's bundled theme of the same name
+[themes.patina]
+appearance = "dark"
+
+# Surfaces, from the main background up to the strongest border. The source
+# defines only the background: the rest are steps from it toward the text color.
+bg   = "#0E1613"
+bg_2 = "#18201D"
+ui   = "#232B27"
+ui_2 = "#2F3733"
+ui_3 = "#3B4440"
+
+# Text, from faint to primary. The faint and muted shades are derived the same way.
+tx_3 = "#606964"
+tx_2 = "#9AA39D"
+tx   = "#DCE5DE"
+
+accent = "#9FC08C"
+
+# Accents. The plain name is the one that reads best on bg; _2 is the
+# secondary shade (the "bright" ANSI slot in terminals). The source has no
+# separate purple, so it repeats magenta. Orange is not in the
+# source palette: it is the midpoint of red and yellow.
+red       = "#D9603F"
+red_2     = "#DF785C"
+orange    = "#D08144"
+orange_2  = "#DC835B"
+yellow    = "#C8A24A"
+yellow_2  = "#D98E5A"
+green     = "#9FC08C"
+green_2   = "#ABC89A"
+cyan      = "#7FD0C0"
+cyan_2    = "#8ED6C8"
+blue      = "#5FC9B0"
+blue_2    = "#5FC9B0"
+purple    = "#D7B45A"
+purple_2  = "#E0C36A"
+magenta   = "#D7B45A"
+magenta_2 = "#E0C36A"

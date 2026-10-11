@@ -1,0 +1,26 @@
+{{- $t := index .themes .theme -}}
+{{- $dark := eq $t.appearance "dark" -}}
+# Generated from .chezmoidata/themes/{{ .theme }}.toml — switch with `./theme.sh <name>`.
+palette = 0={{ if $dark }}{{ $t.bg }}{{ else }}{{ $t.tx }}{{ end }}
+palette = 1={{ $t.red }}
+palette = 2={{ $t.green }}
+palette = 3={{ $t.yellow }}
+palette = 4={{ $t.blue }}
+palette = 5={{ $t.magenta }}
+palette = 6={{ $t.cyan }}
+palette = 7={{ $t.tx_2 }}
+palette = 8={{ $t.tx_3 }}
+palette = 9={{ $t.red_2 }}
+palette = 10={{ $t.green_2 }}
+palette = 11={{ $t.yellow_2 }}
+palette = 12={{ $t.blue_2 }}
+palette = 13={{ $t.magenta_2 }}
+palette = 14={{ $t.cyan_2 }}
+palette = 15={{ if $dark }}{{ $t.tx }}{{ else }}{{ $t.ui_3 }}{{ end }}
+background = {{ $t.bg }}
+foreground = {{ $t.tx }}
+cursor-color = {{ $t.tx }}
+cursor-text = {{ $t.bg }}
+selection-background = {{ $t.ui_3 }}
+selection-foreground = {{ $t.tx }}
+split-divider-color = {{ $t.ui_3 }}

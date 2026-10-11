@@ -1,0 +1,39 @@
+# Seafoam Pastel — from Ghostty's bundled theme of the same name
+[themes.seafoam-pastel]
+appearance = "dark"
+
+# Surfaces, from the main background up to the strongest border. The source
+# defines only the background: the rest are steps from it toward the text color.
+bg   = "#243435"
+bg_2 = "#2D3D3D"
+ui   = "#364645"
+ui_2 = "#40514E"
+ui_3 = "#4B5B58"
+
+# Text, from faint to primary. The faint and muted shades are derived the same way.
+tx_3 = "#6A7C75"
+tx_2 = "#9CAEA1"
+tx   = "#D4E7D4"
+
+accent = "#728C62"
+
+# Accents. The plain name is the one that reads best on bg; _2 is the
+# secondary shade (the "bright" ANSI slot in terminals). The source has no
+# separate purple, so it repeats magenta. Orange is not in the
+# source palette: it is the midpoint of red and yellow.
+red       = "#825D4D"
+red_2     = "#CF937A"
+orange    = "#987F5D"
+orange_2  = "#E4BD8C"
+yellow    = "#ADA16D"
+yellow_2  = "#FAE79D"
+green     = "#728C62"
+green_2   = "#98D9AA"
+cyan      = "#729494"
+cyan_2    = "#ADE0E0"
+blue      = "#4D7B82"
+blue_2    = "#7AC3CF"
+purple    = "#8A7267"
+purple_2  = "#D6B2A1"
+magenta   = "#8A7267"
+magenta_2 = "#D6B2A1"

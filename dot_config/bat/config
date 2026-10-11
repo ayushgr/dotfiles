@@ -1,2 +1,2 @@
 # Theme is set here rather than via BAT_THEME. See `bat --help` for other options.
---theme="Monokai Extended Origin"
+--theme="base16"

@@ -1,0 +1,39 @@
+# Everblush — https://github.com/Everblush
+[themes.everblush]
+appearance = "dark"
+
+# Surfaces, from the main background up to the strongest border. The source
+# defines only the background: the rest are steps from it toward the text color.
+bg   = "#141B1E"
+bg_2 = "#1E2527"
+ui   = "#282E31"
+ui_2 = "#343A3C"
+ui_3 = "#404547"
+
+# Text, from faint to primary. The faint and muted shades are derived the same way.
+tx_3 = "#636769"
+tx_2 = "#9B9D9E"
+tx   = "#DADADA"
+
+accent = "#8CCF7E"
+
+# Accents. The plain name is the one that reads best on bg; _2 is the
+# secondary shade (the "bright" ANSI slot in terminals). The source has no
+# separate purple, so it repeats magenta. Orange is not in the
+# source palette: it is the midpoint of red and yellow.
+red       = "#E57474"
+red_2     = "#EF7E7E"
+orange    = "#E59E70"
+orange_2  = "#F2AA7C"
+yellow    = "#E5C76B"
+yellow_2  = "#F4D67A"
+green     = "#8CCF7E"
+green_2   = "#96D988"
+cyan      = "#6CBFBF"
+cyan_2    = "#67CBE7"
+blue      = "#67B0E8"
+blue_2    = "#71BAF2"
+purple    = "#C47FD5"
+purple_2  = "#CE89DF"
+magenta   = "#C47FD5"
+magenta_2 = "#CE89DF"

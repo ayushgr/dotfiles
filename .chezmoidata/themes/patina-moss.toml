@@ -1,0 +1,39 @@
+# Patina Moss — from Ghostty's bundled theme of the same name
+[themes.patina-moss]
+appearance = "dark"
+
+# Surfaces, from the main background up to the strongest border. The source
+# defines only the background: the rest are steps from it toward the text color.
+bg   = "#20231F"
+bg_2 = "#292C28"
+ui   = "#333530"
+ui_2 = "#3E403A"
+ui_3 = "#494B45"
+
+# Text, from faint to primary. The faint and muted shades are derived the same way.
+tx_3 = "#6B6B63"
+tx_2 = "#9F9D93"
+tx   = "#DBD7CA"
+
+accent = "#5BA886"
+
+# Accents. The plain name is the one that reads best on bg; _2 is the
+# secondary shade (the "bright" ANSI slot in terminals). The source has no
+# separate purple, so it repeats magenta. Orange is not in the
+# source palette: it is the midpoint of red and yellow.
+red       = "#C07878"
+red_2     = "#C07878"
+orange    = "#CA9C73"
+orange_2  = "#CA9C73"
+yellow    = "#D4BF6E"
+yellow_2  = "#D4BF6E"
+green     = "#5BA886"
+green_2   = "#5BA886"
+cyan      = "#63A8A6"
+cyan_2    = "#63A8A6"
+blue      = "#65A8B5"
+blue_2    = "#65A8B5"
+purple    = "#C08A7D"
+purple_2  = "#C08A7D"
+magenta   = "#C08A7D"
+magenta_2 = "#C08A7D"

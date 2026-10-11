@@ -1,0 +1,36 @@
+# Flexoki Dark — https://stephango.com/flexoki
+[themes.flexoki-dark]
+appearance = "dark"
+
+# Surfaces, from the main background up to the strongest border.
+bg   = "#100F0F"
+bg_2 = "#1C1B1A"
+ui   = "#282726"
+ui_2 = "#343331"
+ui_3 = "#403E3C"
+
+# Text, from faint to primary.
+tx_3 = "#575653"
+tx_2 = "#878580"
+tx   = "#CECDC3"
+
+accent = "#4385BE"
+
+# Accents. The plain name is the one that reads best on bg; _2 is the
+# secondary shade (the "bright" ANSI slot in terminals).
+red       = "#D14D41"
+red_2     = "#AF3029"
+orange    = "#DA702C"
+orange_2  = "#BC5215"
+yellow    = "#D0A215"
+yellow_2  = "#AD8301"
+green     = "#879A39"
+green_2   = "#66800B"
+cyan      = "#3AA99F"
+cyan_2    = "#24837B"
+blue      = "#4385BE"
+blue_2    = "#205EA6"
+purple    = "#8B7EC8"
+purple_2  = "#5E409D"
+magenta   = "#CE5D97"
+magenta_2 = "#A02F6F"

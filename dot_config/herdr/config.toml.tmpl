@@ -1,3 +1,4 @@
+{{- $t := index .themes .theme -}}
 onboarding = false
 
 
@@ -38,26 +39,27 @@ open_notification_target = "prefix+a"
 # ── Theme ─────────────────────────────────────────────────────────────────────
 
 [theme]
-# Flexoki Dark isn't a built-in; kanagawa is the closest warm/dark alternative
+# Every color token is overridden below from the active theme (see README),
+# so the built-in base theme only matters as a fallback.
 name = "kanagawa"
 
 [theme.custom]
 panel_bg = "reset"          # transparent — inherits ghostty's background-opacity
-surface0    = "#1C1B1A"     # Flexoki bg
-surface1    = "#282726"     # Flexoki bg-2
-surface_dim = "#343331"     # Flexoki ui
-overlay0    = "#878580"     # Flexoki tx-2 (brighter — counters DIM on agent labels)
-overlay1    = "#575653"     # Flexoki ui-3
-text        = "#B7B5AC"     # Flexoki tx
-subtext0    = "#CECDC3"     # Flexoki base-200 (near-white — bright agent labels)
-accent      = "#4385BE"     # Flexoki blue-400
-blue        = "#4385BE"     # Flexoki blue-400
-teal        = "#3AA99F"     # Flexoki cyan-400
-green       = "#879A39"     # Flexoki green-400
-yellow      = "#D0A215"     # Flexoki yellow-400
-peach       = "#DA702C"     # Flexoki orange-400
-red         = "#D14D41"     # Flexoki red-400
-mauve       = "#8B7EC8"     # Flexoki purple-400
+surface0    = "{{ $t.bg_2 }}"
+surface1    = "{{ $t.ui }}"
+surface_dim = "{{ $t.ui_2 }}"
+overlay0    = "{{ $t.tx_2 }}"     # brighter — counters DIM on agent labels
+overlay1    = "{{ $t.tx_3 }}"
+text        = "{{ $t.tx }}"
+subtext0    = "{{ $t.tx }}"     # bright agent labels
+accent      = "{{ $t.accent }}"
+blue        = "{{ $t.blue }}"
+teal        = "{{ $t.cyan }}"
+green       = "{{ $t.green }}"
+yellow      = "{{ $t.yellow }}"
+peach       = "{{ $t.orange }}"
+red         = "{{ $t.red }}"
+mauve       = "{{ $t.purple }}"
 
 # ── UI ────────────────────────────────────────────────────────────────────────
 

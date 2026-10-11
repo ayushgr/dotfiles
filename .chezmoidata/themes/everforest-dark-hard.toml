@@ -1,0 +1,37 @@
+# Everforest Dark, hard contrast — https://github.com/sainnhe/everforest
+[themes.everforest-dark-hard]
+appearance = "dark"
+
+# Surfaces, from the main background up to the strongest border.
+bg   = "#272E33"
+bg_2 = "#2E383C"
+ui   = "#374145"
+ui_2 = "#414B50"
+ui_3 = "#495156"
+
+# Text, from faint to primary.
+tx_3 = "#7A8478"
+tx_2 = "#859289"
+tx   = "#D3C6AA"
+
+accent = "#A7C080"
+
+# Accents. The plain name is the one that reads best on bg; _2 is the
+# secondary shade (the "bright" ANSI slot in terminals). Everforest has a
+# single shade per hue and no separate magenta, so those repeat.
+red       = "#E67E80"
+red_2     = "#E67E80"
+orange    = "#E69875"
+orange_2  = "#E69875"
+yellow    = "#DBBC7F"
+yellow_2  = "#DBBC7F"
+green     = "#A7C080"
+green_2   = "#A7C080"
+cyan      = "#83C092"
+cyan_2    = "#83C092"
+blue      = "#7FBBB3"
+blue_2    = "#7FBBB3"
+purple    = "#D699B6"
+purple_2  = "#D699B6"
+magenta   = "#D699B6"
+magenta_2 = "#D699B6"

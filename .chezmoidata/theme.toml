@@ -1,0 +1,3 @@
+# The default theme: a name from .chezmoidata/themes/. A device overrides it
+# with theme_local.toml, which theme.sh writes and git ignores.
+theme = "everforest-dark-hard"

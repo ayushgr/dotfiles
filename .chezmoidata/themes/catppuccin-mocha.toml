@@ -1,0 +1,36 @@
+# Catppuccin Mocha — https://github.com/catppuccin/catppuccin
+[themes.catppuccin-mocha]
+appearance = "dark"
+
+# Surfaces, from the main background up to the strongest border.
+bg   = "#1E1E2E"
+bg_2 = "#181825"
+ui   = "#313244"
+ui_2 = "#45475A"
+ui_3 = "#585B70"
+
+# Text, from faint to primary.
+tx_3 = "#6C7086"
+tx_2 = "#A6ADC8"
+tx   = "#CDD6F4"
+
+accent = "#CBA6F7"
+
+# Accents. The plain name is the one that reads best on bg; _2 is the
+# secondary shade (the "bright" ANSI slot in terminals).
+red       = "#F38BA8"
+red_2     = "#EBA0AC"
+orange    = "#FAB387"
+orange_2  = "#FAB387"
+yellow    = "#F9E2AF"
+yellow_2  = "#F9E2AF"
+green     = "#A6E3A1"
+green_2   = "#A6E3A1"
+cyan      = "#94E2D5"
+cyan_2    = "#89DCEB"
+blue      = "#89B4FA"
+blue_2    = "#74C7EC"
+purple    = "#CBA6F7"
+purple_2  = "#B4BEFE"
+magenta   = "#F5C2E7"
+magenta_2 = "#F2CDCD"

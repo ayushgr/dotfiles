@@ -1,0 +1,36 @@
+# Tokyo Night — https://github.com/folke/tokyonight.nvim
+[themes.tokyo-night]
+appearance = "dark"
+
+# Surfaces, from the main background up to the strongest border.
+bg   = "#1A1B26"
+bg_2 = "#1F2335"
+ui   = "#292E42"
+ui_2 = "#3B4261"
+ui_3 = "#414868"
+
+# Text, from faint to primary.
+tx_3 = "#565F89"
+tx_2 = "#A9B1D6"
+tx   = "#C0CAF5"
+
+accent = "#7AA2F7"
+
+# Accents. The plain name is the one that reads best on bg; _2 is the
+# secondary shade (the "bright" ANSI slot in terminals).
+red       = "#F7768E"
+red_2     = "#DB4B4B"
+orange    = "#FF9E64"
+orange_2  = "#FF9E64"
+yellow    = "#E0AF68"
+yellow_2  = "#E0AF68"
+green     = "#9ECE6A"
+green_2   = "#73DACA"
+cyan      = "#7DCFFF"
+cyan_2    = "#2AC3DE"
+blue      = "#7AA2F7"
+blue_2    = "#7AA2F7"
+purple    = "#9D7CD8"
+purple_2  = "#9D7CD8"
+magenta   = "#BB9AF7"
+magenta_2 = "#BB9AF7"

@@ -1,9 +1,9 @@
 font-family = "FiraMono Nerd Font Mono Regular"
 
-theme = Flexoki Dark
+# Colors live in themes/current, generated from the active theme (see README).
+theme = current
 background-opacity = .98
 background-blur = false
-split-divider-color = #454336
 # TODO - Figure out unfocused-split-opacity, unfocused-split-fill, cursor coloring
 
 window-decoration = none

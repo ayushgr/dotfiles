@@ -1,0 +1,38 @@
+# Terafox — https://github.com/EdenEast/nightfox.nvim
+[themes.terafox]
+appearance = "dark"
+
+# Surfaces, from the main background up to the strongest border
+# (upstream bg1 to bg4, then sel1).
+bg   = "#152528"
+bg_2 = "#1D3337"
+ui   = "#254147"
+ui_2 = "#2D4F56"
+ui_3 = "#425E5E"
+
+# Text, from faint to primary (upstream comment, fg2, fg1).
+tx_3 = "#6D7F8B"
+tx_2 = "#CBD9D8"
+tx   = "#E6EAEA"
+
+accent = "#7AA4A1"
+
+# Accents. The plain name is the one that reads best on bg; _2 is the
+# secondary shade (the "bright" ANSI slot in terminals). Purple repeats
+# magenta: upstream has no separate purple.
+red       = "#E85C51"
+red_2     = "#EB746B"
+orange    = "#FF8349"
+orange_2  = "#FF9664"
+yellow    = "#FDA47F"
+yellow_2  = "#FDB292"
+green     = "#7AA4A1"
+green_2   = "#8EB2AF"
+cyan      = "#A1CDD8"
+cyan_2    = "#AFD4DE"
+blue      = "#5A93AA"
+blue_2    = "#73A3B7"
+purple    = "#AD5C7C"
+purple_2  = "#B97490"
+magenta   = "#AD5C7C"
+magenta_2 = "#B97490"

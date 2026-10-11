@@ -1,0 +1,9 @@
+{{- $t := index .themes .theme -}}
+{
+  "name": "Dotfiles",
+  "base": "{{ $t.appearance }}",
+  "overrides": {
+    "warning": "ansi:yellow",
+    "warningShimmer": "ansi:yellowBright"
+  }
+}
