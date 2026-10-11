@@ -23,20 +23,35 @@ esac
 git_branch=$(git -C "$cwd" --no-optional-locks symbolic-ref --short HEAD 2>/dev/null \
   || git -C "$cwd" --no-optional-locks rev-parse --short HEAD 2>/dev/null)
 
-# Colors: use terminal palette colors (ANSI 0-15) so Flexoki Dark's
-# own color definitions are respected rather than overriding with RGB values.
-# Bold+color (1;3Xm) uses the terminal's bright/bold palette slot,
-# which in Flexoki Dark maps to its saturated accent hues.
-BLUE='\033[1;34m'    # bold blue  → Flexoki blue accent
-RED='\033[1;31m'     # bold red → Flexoki red accent
-YELLOW='\033[1;33m'  # bold yellow → Flexoki yellow accent
+# Colors: ANSI palette slots only (no RGB), so the status line follows
+# whichever theme the terminal is using.
+FAINT='\033[90m'     # palette 8 → parent directories
+WHITE='\033[37m'     # palette 7 → muted text, readable in light and dark themes
+GREEN='\033[32m'
+YELLOW='\033[33m'
+RED='\033[31m'
 DIM='\033[2m'        # dim → muted for separators/numbers
 RESET='\033[0m'
 
-line="${BLUE}${short_cwd}${RESET}"
-[ -n "$git_branch" ] && line="${line} ${RED} ${git_branch}${RESET}"
+# Parent directories faint, the current directory in muted text.
+case "$short_cwd" in
+  /)   parent=""; leaf="/" ;;
+  */*) parent="${short_cwd%/*}/"; leaf="${short_cwd##*/}" ;;
+  *)   parent=""; leaf="$short_cwd" ;;
+esac
+
+# Context usage stays dim until it is worth noticing.
+ctx_color=$DIM
+if [ -n "$used_pct" ]; then
+  if [ "$used_pct" -ge 90 ]; then ctx_color=$RED
+  elif [ "$used_pct" -ge 70 ]; then ctx_color=$YELLOW
+  fi
+fi
+
+line="${FAINT}${parent}${RESET}${WHITE}${leaf}${RESET}"
+[ -n "$git_branch" ] && line="${line} ${GREEN} ${git_branch}${RESET}"
 [ -n "$model" ]      && line="${line} ${DIM}|${RESET} ${YELLOW}${model}${RESET}"
-[ -n "$used_pct" ]   && line="${line} ${DIM}| ctx:${used_pct}%${RESET}"
+[ -n "$used_pct" ]   && line="${line} ${DIM}|${RESET} ${ctx_color}ctx:${used_pct}%${RESET}"
 [ -n "$five_h" ]     && line="${line} ${DIM}| 5h:${five_h}%${RESET}"
 
 printf "%b\n" "$line"
