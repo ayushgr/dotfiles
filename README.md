@@ -34,26 +34,25 @@ These `.local` files are never version controlled.
 1. Never alias a core command (`cd`, `ls`, `cat`, `find`, ...). Scripts and coding agents inherit aliases and break. Use an abbreviation instead — abbreviations only expand when typed at the prompt.
 1. Zsh plugins are listed in `.zsh_plugins.txt` and loaded by antidote. Update them with `antidote update`.
 1. Files that are imported manually into apps (not read from `~/.config` at runtime) live in `dot_config/imports/`.
+1. Detail about one tool lives in a `README.md` in that tool's folder. These are not deployed (see `.chezmoiignore`). They cannot go inside `.chezmoidata/`, where chezmoi reads every file as data.
 
 ## Themes
 
-One palette drives the colors of Ghostty, herdr and Zed, and through Ghostty's ANSI palette everything that runs in the terminal (prompt, Claude status line, bat, delta, fzf, eza).
+One palette drives the colors of Ghostty, herdr, Zed and Claude Code, and through Ghostty's ANSI palette everything that runs in the terminal.
 
-- A theme is a palette file in `.chezmoidata/themes/<name>.toml`: an `appearance` (`dark` or `light`) plus the same set of color slots in every theme. To add a theme, copy an existing file and change the name in its `[themes.<name>]` header.
-- The default theme is the name in `.chezmoidata/theme.toml`. Each device can override it in `.chezmoidata/theme_local.toml`, which is not version controlled.
-- `./theme.sh <name>` switches: it writes `.chezmoidata/theme_local.toml`, applies the generated files and reloads Ghostty and herdr. `./theme.sh` alone picks from a list, previewing each theme as it is highlighted. Like `install.sh`, the script stays in this repo and is not deployed, so run it from here (`chezmoi cd`).
-- The generated files are templates that read the active palette: `dot_config/ghostty/themes/current.tmpl`, `dot_config/herdr/config.toml.tmpl`, `dot_config/zed/themes/dotfiles.json.tmpl` and `dot_claude/themes/dotfiles.json.tmpl`. Apps point at these fixed names, so a switch only changes file contents.
+- A theme is a palette file in `.chezmoidata/themes/<name>.toml`. To add one, copy an existing file and change the name in its `[themes.<name>]` header.
+- `./theme.sh <name>` switches the theme on this device; `./theme.sh` alone picks from a list with a live preview. The script is not deployed, so run it from here (`chezmoi cd`).
+- The default is the name in `.chezmoidata/theme.toml`. `theme.sh` records a device's choice in `.chezmoidata/theme_local.toml`, which is not version controlled.
 - Terminal programs must use ANSI colors 0-15 only, never 256-color indices or hex values, or they stop following the theme.
-- Claude Code's own UI is its built-in dark or light preset, chosen by the active theme's `appearance`, plus what `dot_claude/themes/dotfiles.json.tmpl` overrides with ANSI slots (its warning color). Select `Dotfiles` in `/theme` once per device.
-- Zed's `settings.json` is not managed here (Zed rewrites it). Set its theme to `Dotfiles` once per device.
+- Once per device, select the `Dotfiles` theme in Zed's settings and in Claude Code's `/theme`.
+
+## Zed
+
+`cmd-'` saves a review note on the selected code and `cmd-:` copies a prompt that points an agent at the notes. `keymap.json` and `tasks.json` are managed here. See `dot_config/zed/README.md`.
 
 ## Claude Code mods
 
-Mods change Claude Code's own interface. Each is a folder in `dot_claude/mods/<name>/` and is loaded by listing its deployed path in `CLAUDE_CODE_PLUGIN_DIRS` in `.zprofile` (colon-separated).
-
-- `turn-stats` replaces the `(shift+tab to cycle)` hint under the prompt with the session's model time and tool calls, e.g. `4 min · 80 tools`.
-- Check a mod after editing with `claude plugin validate <folder>` and `claude plugin test <folder>`, then apply. A running session reloads the deployed folder on change; new terminals pick up changes to the variable.
-- Claude writes `tsconfig.json` and `.claude-plugin/types/` into the deployed folder. They are generated and not tracked here.
+Mods change Claude Code's own interface. Each is a folder in `dot_claude/mods/`, loaded through `CLAUDE_CODE_PLUGIN_DIRS` in `.zprofile`. See `dot_claude/mods/README.md`.
 
 ## Working in this repo
 

@@ -1,0 +1,23 @@
+// Global Zed tasks. See https://zed.dev/docs/tasks for documentation.
+[
+  {
+    // Bound to cmd-' in keymap.json. Asks for the note in the terminal, which closes afterwards.
+    "label": "review: add note",
+    "command": "~/.config/zed/review-notes.sh add",
+    "reveal": "always",
+    "hide": "on_success",
+    "show_summary": false,
+    "show_command": false,
+    "save": "none"
+  },
+  {
+    // Bound to cmd-: in keymap.json.
+    "label": "review: copy prompt",
+    "command": "~/.config/zed/review-notes.sh copy",
+    "reveal": "no_focus",
+    "hide": "on_success",
+    "show_summary": false,
+    "show_command": false,
+    "save": "none"
+  }
+]

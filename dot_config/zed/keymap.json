@@ -1,0 +1,29 @@
+[
+  {
+    "bindings": {
+      "ctrl-shift-tab": "window::ShowNextWindowTab",
+      "cmd-shift-g": "git_panel::Toggle"
+    }
+  },
+  {
+    // Frees cmd-shift-g for the git panel while an editor pane is focused.
+    "context": "Pane",
+    "unbind": {
+      "cmd-shift-g": "search::SelectPreviousMatch"
+    }
+  },
+  {
+    // Review notes for an agent outside Zed, see review-notes.sh.
+    "context": "Editor && mode == full",
+    "bindings": {
+      // Copies first: the script reads the note's code from the clipboard.
+      "cmd-'": ["action::Sequence", ["editor::Copy", ["task::Spawn", { "task_name": "review: add note" }]]]
+    }
+  },
+  {
+    "context": "Workspace",
+    "bindings": {
+      "cmd-:": ["task::Spawn", { "task_name": "review: copy prompt" }]
+    }
+  }
+]
