@@ -77,9 +77,6 @@ if ! command -v herdr &>/dev/null; then
   curl -fsSL https://herdr.dev/install.sh | sh
 fi
 
-# Herdr plugins
-herdr plugin link ~/.config/herdr/plugins/auto-focus-idle 2>/dev/null || true
-
 #####################################################################
 # Consider new Tools
 # https://github.com/johnalanwoods/maintained-modern-unix
