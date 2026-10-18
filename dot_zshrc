@@ -37,6 +37,12 @@ source $zsh_plugins.zsh
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 
+# Per-pane history: each shell keeps its own list, but every command is written to
+# HISTFILE immediately, so new shells start with all of them. Replaces oh-my-zsh's share_history.
+unsetopt share_history
+setopt inc_append_history
+
+
 ### Set up fzf -> Taken from https://www.josean.com/posts/7-amazing-cli-tools
 # Consider setting up previews like in the link above
   source <(fzf --zsh)
