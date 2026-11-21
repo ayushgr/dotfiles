@@ -47,7 +47,17 @@ export default class Sidebar extends View {
     if (checking()) return;
     // A cd or checkout can change a space's repo: look again now and then.
     cx.timer.every(15000, () => { for (const k of Object.keys(this.repo)) this.queue.add(k); });
+    // The diff popout (mods/diff-pop) is per space: reopen it when you come back to a space
+    // it was open in. Only the list copy does this; no popout survives a restart.
+    if (!props()?.header) setShared("diffpop.live", false);
     cx.timer.every(500, (cx) => {
+      if (!props()?.header) {
+        const active = spaces().find((s) => s.active)?.id;
+        if (active && (shared("diffpop.spaces") ?? {})[active] && !shared("diffpop.live")) {
+          setShared("diffpop.live", true);
+          run("mod.open", { name: "diff-pop" });
+        }
+      }
       if (this.queue.size) this.drain(cx);
       // The group picker offers these names.
       if (this.auto && JSON.stringify(shared("sidebar.auto") ?? {}) !== JSON.stringify(this.auto)) setShared("sidebar.auto", this.auto);

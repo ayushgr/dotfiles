@@ -66,7 +66,8 @@
     "cmd-z": "pane.zoom",
     "cmd-k": "mod.open:my-palette",
     "cmd-y": "mod.open:panel-files",
-    "cmd-g": "mod.open:panel-changes"
+    "cmd-g": "mod.open:diff-pop",
+    "cmd-shift-g": "mod.open:panel-changes"
   },
   "terminal": {
     "cmd-f": "terminal.search",
