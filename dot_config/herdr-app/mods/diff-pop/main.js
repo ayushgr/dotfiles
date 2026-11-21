@@ -21,8 +21,9 @@ import { v_flex, h_flex, Scrollbar, ScrollHandle, TextareaState, Textarea } from
 import { spaces, panes, focused, exec, hc, readTextFile, watchFolder, theme, props, closeOverlay, checking, shared, setShared } from "herdr";
 
 const READ = ["--no-optional-locks", "-c", "core.fsmonitor=false", "-c", "diff.autoRefreshIndex=false"];
-// Rows are a plain list (each row takes mouse presses for selecting), so a file shows its first 2000 diff lines.
+// Bound the amount of patch text parsed for a single file.
 const MAX_FILES = 1000, MAX_LINES = 2000, MAX_LINE = 2000, MAX_QUOTE = 40;
+const MAX_HIGHLIGHT_BYTES = 256 * 1024;
 const ROW = 20, FILE_ROW = 24, CHAR = 7.3;
 // Per space, while Herdr runs: the draft, and which file you were on.
 const DRAFTS = new Map(), PLACES = new Map();
@@ -56,6 +57,62 @@ const countLines = (text) => (text ? text.split("\n").length - Number(text.endsW
 // Text draws a tab as nothing: pad each to the next 4-column stop.
 const untab = (text) => text.replace(/[^\t]*\t/g, (s) => s.slice(0, -1).padEnd((s.length - 1) - (s.length - 1) % 4 + 4));
 const base = (path) => path.split("/").pop();
+
+// Herdr's exec has no stdin option. Pass paths as arguments to a fixed script.
+const HIGHLIGHT = `
+set -o pipefail
+path=$1
+object=$2
+limit=$3
+range=$4
+highlight() {
+  bat --no-config --style=plain --paging=never --wrap=never --tabs=0 \\
+    --color=always --theme=ansi --file-name="$path" --line-range="$range"
+}
+if [ -n "$object" ]; then
+  size=$(git cat-file -s "$object") || exit 1
+  [ "$size" -le "$limit" ] || exit 1
+  git cat-file blob "$object" | highlight
+else
+  [ -f "./$path" ] && [ ! -L "./$path" ] || exit 1
+  size=$(wc -c < "./$path") || exit 1
+  [ "$size" -le "$limit" ] || exit 1
+  highlight < "./$path"
+fi
+`;
+
+function colorRuns(line, text) {
+  const runs = [];
+  let color = null, start = 0, column = 0, plain = "";
+  const append = (end) => {
+    let padding = 0;
+    const part = line.slice(start, end).replace(/\t/g, (_, i) => {
+      const spaces = 4 - (column + i + padding) % 4;
+      padding += spaces - 1;
+      return " ".repeat(spaces);
+    });
+    if (!part) return;
+    column += part.length;
+    plain += part;
+    const last = runs[runs.length - 1];
+    if (last?.color === color) last.text += part;
+    else runs.push({ text: part, color });
+  };
+  for (const match of line.matchAll(/\x1b\[([0-9;]*)m/g)) {
+    append(match.index);
+    start = match.index + match[0].length;
+    for (const value of match[1].split(";")) {
+      const code = Number(value);
+      if (code === 0 || code === 39) color = null;
+      else if (code >= 30 && code <= 37) color = code - 30;
+      else if (code >= 90 && code <= 97) color = code - 82;
+      else if (code === 38 || code === 48 || code === 58) return null;
+    }
+  }
+  append(line.length);
+  // Keep the diff text if the file changed during highlighting or bat transformed it.
+  return plain === text && runs.some((run) => run.color !== null) ? runs : null;
+}
 
 // Diff lines → unified rows (old/new numbers) and side-by-side rows (removed lines paired
 // with the added lines that replace them), each with the row index of every hunk for n/p.
@@ -94,12 +151,12 @@ function diffRows(lines) {
 
 export default class DiffPop extends View {
   init(_props, cx) {
-    this.files = []; this.diff = diffRows([]); this.at = 0; this.width = 0; this.half = 0;
+    this.files = []; this.diff = diffRows([]); this.at = 0; this.width = 0;
     this.sel = null; this.dragging = false; this.refs = 0;
     try { this.mode = localStorage.getItem("mode") || "split"; } catch { this.mode = "split"; }
     this.handle = cx.focus_handle();
     this.fileScroll = ScrollHandle.new();
-    this.diffScroll = ScrollHandle.new();
+    this.diffOffset = 0;
     this.draft = TextareaState.new({ placeholder: "Select lines to quote them, write your notes, Enter to send" });
     this.draft.set_auto_grow(1, 8);
     this.draft.on("focus", (_e, cx) => { this.typing = true; cx.notify(); });
@@ -162,33 +219,48 @@ export default class DiffPop extends View {
         if (status.code !== 0) throw new Error(status.stderr);
         this.hasHead = head.code === 0;
         this.branch = branch.stdout.trim();
-        const stats = {};
-        const results = this.hasHead
-          ? [await this.git(["diff", "HEAD", "--numstat", "-z", "--no-renames"])]
-          : [await this.git(["diff", "--cached", "--numstat", "-z", "--no-renames"]), await this.git(["diff", "--numstat", "-z", "--no-renames"])];
-        for (const r of results) {
-          for (const entry of r.stdout.split("\0")) {
-            const [a, d, ...parts] = entry.split("\t");
-            if (!parts.length) continue;
-            const path = parts.join("\t"), s = stats[path] ?? { add: 0, del: 0 };
-            stats[path] = { add: s.add + (Number(a) || 0), del: s.del + (Number(d) || 0), binary: a === "-" };
-          }
-        }
         const entries = status.stdout.split("\0").filter(Boolean);
         const files = entries.slice(0, MAX_FILES).map((e) => {
           const xy = e.slice(0, 2), path = e.slice(3), fresh = xy === "??";
           const conflict = xy.includes("U") || xy === "AA" || xy === "DD";
           const kind = conflict ? "U" : xy.includes("D") ? "D" : fresh || xy.includes("A") ? "A" : "M";
-          return { path, kind, fresh, staged: !fresh && xy[0] !== " ", ...(stats[path] ?? { add: 0, del: 0 }) };
+          return { path, kind, fresh, staged: !fresh && xy[0] !== " ", add: 0, del: 0 };
         }).sort((a, b) => a.path.localeCompare(b.path));
         const keep = this.files[this.at]?.path ?? PLACES.get(this.space)?.path;
         this.files = files; this.limited = entries.length > MAX_FILES; this.error = null;
         const again = files.findIndex((f) => f.path === keep);
-        await this.select(again >= 0 ? again : 0, cx, again >= 0);
+        const selection = this.select(again >= 0 ? again : 0, cx, again >= 0);
+        cx.notify();
+        await selection;
+        if (this.closed) return;
         this.watch(cx);
+        if (files.some((file) => !file.fresh)) {
+          cx.spawn(async (cx) => { await this.loadCounts(files, cx); });
+        }
       } catch (e) { this.error = String(e.message ?? e); }
       finally { this.loading = false; cx.notify(); }
     });
+  }
+
+  async loadCounts(files, cx) {
+    const args = ["--numstat", "-z", "--no-renames"];
+    try {
+      const results = this.hasHead
+        ? [await this.git(["diff", "HEAD", ...args])]
+        : await Promise.all([this.git(["diff", "--cached", ...args]), this.git(["diff", ...args])]);
+      if (this.closed || this.files !== files || results.some((r) => r.code !== 0)) return;
+      const byPath = new Map(files.filter((file) => !file.fresh).map((file) => [file.path, file]));
+      for (const r of results) {
+        for (const entry of r.stdout.split("\0")) {
+          const [add, del, ...path] = entry.split("\t");
+          const file = byPath.get(path.join("\t"));
+          if (!file) continue;
+          file.add += Number(add) || 0;
+          file.del += Number(del) || 0;
+        }
+      }
+      cx.notify();
+    } catch {} // Counts are optional; the diff is already available.
   }
 
   // Refresh while open when the work tree changes (local repos only).
@@ -207,7 +279,8 @@ export default class DiffPop extends View {
   }
 
   async select(i, cx, keepScroll = false) {
-    if (!this.files.length) { this.diff = diffRows([]); this.sel = null; return; }
+    const request = this.diffRequest = (this.diffRequest ?? 0) + 1;
+    if (!this.files.length) { this.diff = diffRows([]); this.colors = null; this.sel = null; return; }
     this.at = Math.max(0, Math.min(i, this.files.length - 1));
     this.fileScroll.scroll_to_item(this.at);
     const file = this.files[this.at], path = file.path;
@@ -222,18 +295,49 @@ export default class DiffPop extends View {
         const r = await this.git(["diff", ...(this.hasHead ? ["HEAD"] : []), "--no-ext-diff", "--no-textconv", "--no-color", "--", path]);
         if (r.code !== 0) throw new Error(r.stderr);
         const all = r.stdout.replace(/\n$/, "").split("\n"), first = all.findIndex((l) => l.startsWith("@@"));
-        lines = first < 0 ? [file.binary ? "\\ Binary file changed" : "\\ No text changes (mode or rename only)"] : all.slice(first, first + MAX_LINES);
+        const binary = first < 0 && all.some((line) => line.startsWith("Binary files ") || line === "GIT binary patch");
+        lines = first < 0 ? [binary ? "\\ Binary file changed" : "\\ No text changes (mode or rename only)"] : all.slice(first, first + MAX_LINES);
       }
     } catch (e) { lines = [`\\ Can't show this diff: ${e.message ?? e}`]; }
-    if (this.files[this.at]?.path !== path) return; // moved on meanwhile
+    if (this.diffRequest !== request || this.files[this.at]?.path !== path || this.closed) return;
     const same = keepScroll && this.diffPath === path;
     this.diff = diffRows(lines); this.diffPath = path;
+    this.colors = null;
     if (!same) { this.hunk = null; this.sel = null; }
     const longest = Math.max(0, ...this.diff.uni.map((r) => r.text.length));
     this.width = Math.max(400, longest * CHAR + 110);
-    this.half = Math.max(360, longest * CHAR + 70);
-    if (!keepScroll) this.diffScroll.scroll_to_item(0);
+    if (!keepScroll) this.diffOffset = 0;
     cx.notify();
+    const rows = this.diff.uni;
+    const from = this.hasHead ? "HEAD" : "";
+    cx.spawn(async (cx) => {
+      const [old, now] = await Promise.all([
+        this.highlight(path, rows, "old", `${from}:${path}`),
+        this.highlight(path, rows, "now", ""),
+      ]);
+      if (this.diffRequest !== request || this.closed) return;
+      this.colors = { old, now };
+      cx.notify();
+    });
+  }
+
+  async highlight(path, rows, side, object) {
+    const colors = new Map();
+    const numbered = rows.filter((row) => row[side] !== undefined);
+    if (!numbered.length) return colors;
+    const first = numbered[0][side], last = numbered[numbered.length - 1][side];
+    try {
+      const r = await exec("bash", ["-c", HIGHLIGHT, "diff-pop", path, object, String(MAX_HIGHLIGHT_BYTES), `${first}:${last}`],
+        { cwd: this.root, on: this.where.on, timeout: 3000 });
+      if (r.code !== 0) return colors;
+      const lines = r.stdout.split("\n");
+      for (const row of numbered) {
+        const line = lines[row[side] - first];
+        const runs = line === undefined ? null : colorRuns(line, row.text);
+        if (runs) colors.set(row[side], runs);
+      }
+    } catch {} // Plain text remains available if the highlighter fails.
+    return colors;
   }
 
   move(by, cx) {
@@ -247,7 +351,7 @@ export default class DiffPop extends View {
     const hunks = this.hunks();
     if (!hunks.length) return;
     this.hunk = this.hunk === null || this.hunk === undefined ? (by > 0 ? 0 : hunks.length - 1) : (this.hunk + by + hunks.length) % hunks.length;
-    this.diffScroll.scroll_to_item(hunks[this.hunk]);
+    this.scrollDiff(hunks[this.hunk] * ROW);
     cx.notify();
   }
 
@@ -255,8 +359,59 @@ export default class DiffPop extends View {
     this.mode = this.mode === "split" ? "unified" : "split";
     try { localStorage.setItem("mode", this.mode); } catch {}
     this.sel = null;
-    this.diffScroll.scroll_to_item(this.hunk !== null && this.hunk !== undefined ? this.hunks()[this.hunk] ?? 0 : 0);
+    this.scrollDiff((this.hunks()[this.hunk] ?? 0) * ROW);
     cx.notify();
+  }
+
+  scrollDiff(offset, height = this.diffHeight ?? ROW) {
+    this.diffOffset = Math.max(0, Math.min(offset, this.rows().length * ROW - height));
+  }
+
+  diffViewport(rows, split, t) {
+    // Native lazy-list callbacks cannot register the per-row mouse handlers used for quoting.
+    const windowHeight = window.viewport_size().height;
+    const height = this.diffHeight ?? Math.max(ROW, windowHeight * 0.85 - 100);
+    const total = rows.length * ROW;
+    const offset = Math.max(0, Math.min(this.diffOffset, total - height));
+    const start = Math.floor(offset / ROW);
+    const end = Math.min(rows.length, start + Math.ceil(windowHeight / ROW) + 1);
+    const diff = v_flex().id("dp-diff").absolute().inset_0().overflow_hidden()
+      .on_mouse_move((e, cx) => {
+        if (this.diffHeight === e.bounds.height) return;
+        this.diffHeight = e.bounds.height;
+        this.scrollDiff(this.diffOffset);
+        cx.notify();
+      })
+      .on_scroll_wheel((e, cx) => {
+        if (!e.delta.y) return;
+        this.diffHeight = e.bounds?.height ?? height;
+        this.scrollDiff(this.diffOffset - e.delta.y);
+        cx.notify();
+      })
+      .child(v_flex().absolute().left(0).right(0).top(start * ROW - offset)
+        .children(rows.slice(start, end).map((row, i) => split
+          ? this.splitRow(row, start + i, t) : this.diffRow(row, start + i, t))));
+    const viewport = split ? diff : div().id("dp-diff-x").absolute().inset_0().overflow_x_scrollbar()
+      .child(div().relative().size_full().min_w(this.width).child(diff));
+    if (total <= height) return viewport;
+    const thumb = Math.min(height, Math.max(20, height * height / total));
+    const thumbTop = offset / (total - height) * (height - thumb);
+    return div().absolute().inset_0().child(viewport)
+      .child(div().id("dp-diff-scrollbar").absolute().right(0).top(0).bottom(0).w(9).bg(t.surface)
+        .on_mouse_down("left", (e, cx) => {
+          if (!e.bounds || !e.local_position) return;
+          const track = e.bounds.height;
+          this.diffHeight = track;
+          const size = Math.min(track, Math.max(20, track * track / total));
+          const top = total > track ? offset / (total - track) * (track - size) : 0;
+          const y = e.local_position.y;
+          const grab = y >= top && y <= top + size ? y - top : size / 2;
+          this.diffScrollDrag = { origin: e.bounds.y + grab, scale: track > size ? (total - track) / (track - size) : 0 };
+          this.scrollDiff((y - grab) * this.diffScrollDrag.scale, track);
+          cx.notify();
+        })
+        .child(div().absolute().left(2).right(2).top(`${100 * thumbTop / height}%`)
+          .h(`${100 * thumb / height}%`).rounded(3).bg(t.dim)));
   }
 
   // ── Selecting lines ────────────────────────────────────────────────────────────────
@@ -433,6 +588,13 @@ export default class DiffPop extends View {
 
   note(r, t) { return h_flex().w_full().h(ROW).flex_none().px(10).items_center().text_color(t.dim).child(r.text); }
 
+  code(text, side, number, t) {
+    const runs = this.colors?.[side].get(number);
+    if (!runs) return div().flex_1().whitespace_nowrap().child(text);
+    return h_flex().flex_1().min_w(0).children(runs.map((run) => div().flex_none().whitespace_nowrap()
+      .text_color(run.color === null ? t.foreground : t[`ansi${run.color}`] ?? t.foreground).child(run.text)));
+  }
+
   diffRow(r, i, t) {
     if (r.kind === "@") return this.header(r, t);
     if (r.kind === "note") return this.note(r, t);
@@ -442,17 +604,17 @@ export default class DiffPop extends View {
     return this.selectable(h_flex().id(`u-${i}`).w_full().h(ROW).flex_none().gap(8).items_center().when(Boolean(bg), (el) => el.bg(bg))
       .child(num(r.old)).child(num(r.now))
       .child(div().w(10).flex_none().text_color(r.kind === "+" ? t.ansi2 : r.kind === "-" ? t.ansi1 : t.dim).child(sign))
-      .child(div().flex_1().whitespace_nowrap().child(r.text)), i, "uni");
+      .child(r.kind === "-" ? this.code(r.text, "old", r.old, t) : this.code(r.text, "now", r.now, t)), i, "uni");
   }
 
   // One side of a side-by-side row; null is the empty side of an unmatched line.
   side(c, i, side, t) {
-    const el = h_flex().id(`${side}-${i}`).flex_1().min_w(this.half).h_full().gap(8).items_center();
+    const el = h_flex().id(`${side}-${i}`).flex_1().min_w(0).h_full().gap(8).items_center().overflow_hidden();
     if (!c) return el.bg(`${t.border}66`);
     const bg = this.inSel(i, side) ? t.selection : this.tint(c.kind, t);
     return this.selectable(el.when(Boolean(bg), (e) => e.bg(bg))
       .child(div().w(40).flex_none().text_right().text_color(t.dim).child(String(c.num)))
-      .child(div().flex_1().whitespace_nowrap().child(c.text)), i, side);
+      .child(this.code(c.text, side === "old" ? "old" : "now", c.num, t)), i, side);
   }
 
   splitRow(r, i, t) {
@@ -487,7 +649,13 @@ export default class DiffPop extends View {
     const repo = this.root ? this.root.split("/").pop() : "";
     const hint = (k, label) => h_flex().gap(4).child(div().text_color(t.muted).child(k)).child(div().text_color(t.dim).child(label));
     return v_flex().id("diff-pop").track_focus(this.handle).on_key_down((e, cx) => this.key(e, cx))
-      .on_mouse_up("left", (_e, cx) => this.release(cx))
+      .on_mouse_move((e, cx) => {
+        if (!this.diffScrollDrag) return;
+        const { origin, scale } = this.diffScrollDrag;
+        this.scrollDiff((e.position.y - origin) * scale);
+        cx.notify();
+      })
+      .on_mouse_up("left", (_e, cx) => { this.diffScrollDrag = null; this.release(cx); })
       .size_full().min_h(0).bg(t.background).text_color(t.foreground).text_size(12.5)
       // Header: repo · branch · totals, and the keys.
       .child(h_flex().id("dp-head").h(30).flex_none().px(12).gap(10).items_center().border_b(1).border_color(t.border)
@@ -519,10 +687,7 @@ export default class DiffPop extends View {
             .when(hunks.length > 1, (e2) => e2.child(div().text_size(11).text_color(t.dim)
               .child(`${this.hunk === null || this.hunk === undefined ? "–" : this.hunk + 1}/${hunks.length} changes`)))))
           .child(div().flex_1().min_h(0).relative().text_size(12)
-            .child(div().id("dp-diff-x").size_full().overflow_x_scrollbar()
-              .child(v_flex().id("dp-diff").min_w(split ? this.half * 2 + 1 : this.width).h_full().overflow_y_scroll().track_scroll(this.diffScroll)
-                .children(rows.map((r, i) => (split ? this.splitRow(r, i, t) : this.diffRow(r, i, t))))))
-            .child(Scrollbar.vertical("dp-diff").absolute().inset_0()))))
+            .child(this.diffViewport(rows, split, t)))))
       .child(this.composer(t));
   }
 }
