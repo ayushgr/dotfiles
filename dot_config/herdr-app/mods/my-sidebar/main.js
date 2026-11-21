@@ -167,8 +167,9 @@ export default class Sidebar extends View {
   agentRow(a, t) {
     const p = a.program;
     const working = a.status === "working";
+    const iconColors = { claude: "#D97757", codex: t.ansi4, opencode: t.muted };
     const icon = working ? spinner(t)
-      : p?.icon ? (p.tint ? svg(p.icon).size(12).text_color(t.muted) : image(p.icon).size(12)) : null;
+      : p?.icon ? (p.tint ? svg(p.icon).size(12).text_color(iconColors[p.key] ?? t.muted) : image(p.icon).size(12)) : null;
     const title = cleanTitle(a.title) || p?.name || a.tab_name;
     return this.row(`ag-${a.address}`, 20, 1, icon, t).text_size(12)
       .on_click(() => run("agent.focus", { terminal: a.address }))

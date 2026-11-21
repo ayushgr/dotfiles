@@ -36,7 +36,8 @@ chezmoi apply --error-on-conflict \
   ~/.config/herdr/config.toml \
   ~/.config/herdr-app/themes/dotfiles.json \
   ~/.config/zed/themes/dotfiles.json \
-  ~/.claude/themes/dotfiles.json
+  ~/.claude/themes/dotfiles.json \
+  ~/.codex/themes/dotfiles.tmTheme
 
 # Ghostty reloads its config on SIGUSR2; Zed, Claude Code and the Herdr app
 # watch their themes directories.

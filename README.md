@@ -38,13 +38,14 @@ These `.local` files are never version controlled.
 
 ## Themes
 
-One palette drives the colors of Ghostty, herdr (TUI and desktop app), Zed and Claude Code, and through Ghostty's ANSI palette everything that runs in the terminal.
+One palette drives the colors of Ghostty, herdr (TUI and desktop app), Zed and Claude Code. Codex CLI's Dotfiles syntax theme follows Ghostty's ANSI palette.
 
 - A theme is a palette file in `.chezmoidata/themes/<name>.toml`. To add one, copy an existing file and change the name in its `[themes.<name>]` header.
 - `./theme.sh <name>` switches the theme on this device; `./theme.sh` alone picks from a list with a live preview. The script is not deployed, so run it from here (`chezmoi cd`).
 - The default is the name in `.chezmoidata/theme.toml`. `theme.sh` records a device's choice in `.chezmoidata/theme_local.toml`, which is not version controlled.
 - Terminal programs must use ANSI colors 0-15 only, never 256-color indices or hex values, or they stop following the theme.
 - Once per device, select the `Dotfiles` theme in Zed's settings, in Claude Code's `/theme` and in the Herdr app's settings.
+- In Codex CLI, run `/theme` and select `dotfiles` once. The file is installed under `~/.codex/themes`. If you set a custom `CODEX_HOME`, link the installed theme into its `themes` directory.
 
 ## Zed
 
