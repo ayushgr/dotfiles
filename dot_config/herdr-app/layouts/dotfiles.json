@@ -76,7 +76,15 @@
                   },
                   "radius": 0,
                   "gap": 0,
-                  "lone": false
+                  "lone": false,
+                  "header": {
+                    "content": {
+                      "mod": "pane-line"
+                    },
+                    "height": 2,
+                    "position": "top",
+                    "reveal": "always"
+                  }
                 }
               }
             },

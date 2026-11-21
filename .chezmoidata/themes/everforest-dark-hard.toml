@@ -16,6 +16,10 @@ tx   = "#D3C6AA"
 
 accent = "#A7C080"
 
+# Optional: the terminal cursor (else the accent). A brighter white than tx, so the
+# focused pane's solid cursor stands out.
+cursor = "#E8E1D2"
+
 # Accents. The plain name is the one that reads best on bg; _2 is the
 # secondary shade (the "bright" ANSI slot in terminals). Everforest has a
 # single shade per hue and no separate magenta, so those repeat.
