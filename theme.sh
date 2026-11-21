@@ -34,10 +34,11 @@ TOML
 chezmoi apply --error-on-conflict \
   ~/.config/ghostty/themes/current \
   ~/.config/herdr/config.toml \
+  ~/.config/herdr-app/themes/dotfiles.json \
   ~/.config/zed/themes/dotfiles.json \
   ~/.claude/themes/dotfiles.json
 
-# Ghostty reloads its config on SIGUSR2; Zed and Claude Code watch their
-# themes directories.
+# Ghostty reloads its config on SIGUSR2; Zed, Claude Code and the Herdr app
+# watch their themes directories.
 pkill -USR2 -x ghostty || true
 herdr server reload-config >/dev/null 2>&1 || true

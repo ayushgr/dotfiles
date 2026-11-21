@@ -77,6 +77,10 @@ if ! command -v herdr &>/dev/null; then
   curl -fsSL https://herdr.dev/install.sh | sh
 fi
 
+# Herdr desktop app - separate config (~/.config/herdr-app) and server from the TUI
+brew install --cask herdr-app
+# Herdr -> Settings -> select the Dotfiles theme
+
 #####################################################################
 # Consider new Tools
 # https://github.com/johnalanwoods/maintained-modern-unix

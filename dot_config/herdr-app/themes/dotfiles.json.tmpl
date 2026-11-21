@@ -1,0 +1,36 @@
+{{- $t := index .themes .theme -}}
+{{- $dark := eq $t.appearance "dark" -}}
+{
+  "background": "{{ $t.bg }}",
+  "foreground": "{{ $t.tx }}",
+  "selection": "{{ $t.ui_3 }}",
+  "cursor": "{{ if hasKey $t "cursor" }}{{ $t.cursor }}{{ else }}{{ $t.accent }}{{ end }}",
+  "ansi": [
+    "{{ if $dark }}{{ $t.bg }}{{ else }}{{ $t.tx }}{{ end }}", "{{ $t.red }}", "{{ $t.green }}", "{{ $t.yellow }}",
+    "{{ $t.blue }}", "{{ $t.magenta }}", "{{ $t.cyan }}", "{{ $t.tx_2 }}",
+    "{{ $t.tx_3 }}", "{{ $t.red_2 }}", "{{ $t.green_2 }}", "{{ $t.yellow_2 }}",
+    "{{ $t.blue_2 }}", "{{ $t.magenta_2 }}", "{{ $t.cyan_2 }}", "{{ if $dark }}{{ $t.tx }}{{ else }}{{ $t.ui_3 }}{{ end }}"
+  ],
+  "colors": {
+    "canvas": "{{ $t.bg_2 }}",
+    "chrome": "{{ $t.bg_2 }}",
+    "surface": "{{ $t.bg }}",
+    "popover": "{{ $t.bg_2 }}",
+    "raised": "{{ $t.ui }}",
+    "hover": "{{ $t.ui }}",
+    "selected": "{{ $t.ui_2 }}",
+    "border": "{{ $t.ui }}",
+    "input": "{{ $t.ui_2 }}",
+    "foreground": "{{ $t.tx }}",
+    "muted": "{{ $t.tx_2 }}",
+    "dim": "{{ $t.tx_3 }}",
+    "accent": "{{ $t.accent }}",
+    "accent_foreground": "{{ $t.bg }}",
+    "solid": "{{ $t.accent }}",
+    "solid_foreground": "{{ $t.bg }}",
+    "working": "{{ $t.yellow }}",
+    "blocked": "{{ $t.red }}",
+    "done": "{{ $t.green }}",
+    "idle": "{{ $t.tx_3 }}"
+  }
+}
