@@ -1,0 +1,6 @@
+# herdr-core (hc) settings. Read at each use; no restart needed.
+
+# When a kept terminal's program is lost (crash, signal, reboot), show its last
+# saved screen above the replacement shell, so I can see what was running there
+# (e.g. which Claude session to resume).
+restore_screen = true
