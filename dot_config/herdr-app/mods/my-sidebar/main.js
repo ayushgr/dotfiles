@@ -4,10 +4,12 @@
 // Spaces always stay in Herdr's order (1, 2, 3…); each run of a group gets a green line on its left,
 // brighter for the active space's group (named groups also show their name). Spaces outside any repo group by their folder.
 // Header toggle: grouping on/off.
+// With more than one machine (this one plus any from `hc machine ls`), spaces sit under a header
+// per machine, indented; with one machine the list looks as it always did.
 
 import { View, div, svg, image } from "gpui-kit";
 import { v_flex, h_flex } from "gpui-base";
-import { spaces, agents, panes, run, openOverlay, exec, theme, shared, setShared, layout, checking, props, home } from "herdr";
+import { spaces, machines, agents, panes, run, openOverlay, exec, theme, shared, setShared, layout, checking, props, home } from "herdr";
 
 // Group lines are all the accent green: the active space's group full strength and wider,
 // the others faded. Theme colours are "#rrggbb"; anything else is used as is.
@@ -20,6 +22,16 @@ const spinner = (t) => div().text_color(t.working).frames(SPIN, 80);
 // Row layout shared by spaces and agents (px).
 const PAD = 4, LEAD = 14, GAP = 6;
 const URGENCY = { blocked: 4, done: 3, working: 2, idle: 1 };
+// Indent of a machine's spaces under its header (px).
+const MACHINE_INDENT = 10;
+
+// Every machine Herdr knows, this one (null) first, then the others by name, the same order
+// Herdr keeps spaces in. A space's machine counts even before its layout has loaded.
+function machineNames(sp) {
+  const remote = new Set(sp.map((s) => s.machine).filter(Boolean));
+  for (const m of machines()) if (m.name) remote.add(m.name);
+  return [null, ...[...remote].sort((a, b) => a.localeCompare(b))];
+}
 
 function find(node, id) {
   if (node?.id === id) return node;
@@ -117,8 +129,9 @@ export default class Sidebar extends View {
         }
       }
       const last = runs.at(-1);
-      if (last && last.key === key) last.rows.push({ s, i });
-      else runs.push({ key, name, custom: key.startsWith("custom:"), rows: [{ s, i }] });
+      const machine = s.machine ?? null;
+      if (last && last.key === key && last.machine === machine) last.rows.push({ s, i });
+      else runs.push({ key, name, machine, custom: key.startsWith("custom:"), rows: [{ s, i }] });
     });
     this.auto = auto;
     return runs;
@@ -204,10 +217,13 @@ export default class Sidebar extends View {
 
   rail(sp, t) {
     return v_flex().id("rail").size_full().pt(6).gap(2).items_center().overflow_y_scrollbar().text_size(12.5)
-      .children(sp.map((s, i) => h_flex().id(`r-${s.id}`).relative().w(32).h(26).rounded(6).justify_center().items_center()
+      .children(sp.flatMap((s, i) => [
+        ...(i > 0 && (s.machine ?? null) !== (sp[i - 1].machine ?? null) ? [div().id(`r-split-${i}`).w(20).h(1).my(3).flex_none().bg(theme().dim)] : []),
+        h_flex().id(`r-${s.id}`).relative().w(32).h(26).rounded(6).justify_center().items_center()
         .hover((h) => h.bg(t.hover)).on_click(() => run("space.select", { id: s.id }))
         .child(div().text_color(s.active ? t.accent : t.muted).child(String(i + 1)))
-        .when(Boolean(this.dot(s.status, t, 5)), (el) => el.child(div().absolute().top(4).right(3).child(this.dot(s.status, t, 5))))));
+        .when(Boolean(this.dot(s.status, t, 5)), (el) => el.child(div().absolute().top(4).right(3).child(this.dot(s.status, t, 5)))),
+      ]));
   }
 
   render(cx) {
@@ -223,6 +239,7 @@ export default class Sidebar extends View {
     const grouped = shared("sidebar.grouping") !== "none";
     const blocks = [];
     groups.forEach((g, gi) => {
+      g.gi = gi;
       const rows = [];
       g.rows.forEach((r, ri) => {
         let row = this.spaceRow(r, t, sp);
@@ -234,12 +251,34 @@ export default class Sidebar extends View {
       const current = g.rows.some((r) => r.s.active);
       const busy = g.rows.some((r) => (bySpace[r.s.id] ?? []).some((a) => a.status === "working"));
       const hueOf = busy ? t.working : t.accent;
-      blocks.push(h_flex().id(`grp-${gi}`).items_stretch().gap(2).when(gi > 0 && grouped, (el) => el.mt(4))
+      blocks.push(h_flex().id(`grp-${gi}`).items_stretch().gap(2).when(gi > 0 && grouped && groups[gi - 1].machine === g.machine, (el) => el.mt(4))
         .child(div().w(2).flex_none().rounded(2).my(2).bg(!line ? t.chrome : current ? hueOf : faded(hueOf)))
         .child(v_flex().flex_1().min_w(0).gap(1).children(rows)));
     });
     return v_flex().size_full().min_h(0).bg(t.chrome).text_size(13)
       .on_mouse_up("left", (_e, cx) => { if (this.pressed) { this.pressed = null; this.over = null; cx.notify(); } })
-      .child(v_flex().id("list").flex_1().min_h(0).px(2).pb(4).gap(0).overflow_y_scrollbar().children(blocks));
+      .child(v_flex().id("list").flex_1().min_h(0).px(2).pb(4).gap(0).overflow_y_scrollbar().children(this.byMachine(sp, groups, blocks, t)));
+  }
+
+  // One machine: the blocks as they are. More: a header per machine with its blocks indented under it.
+  byMachine(sp, groups, blocks, t) {
+    const names = machineNames(sp);
+    if (names.length < 2) return blocks;
+    const layoutOf = (m) => machines().find((k) => (k.name ?? null) === m)?.layout;
+    return names.map((m) => {
+      const mine = groups.filter((g) => g.machine === m).map((g) => blocks[g.gi]);
+      const state = m ? layoutOf(m) ?? "loading" : "ready";
+      const head = h_flex().id(`machine-${m ?? "local"}`).h(24).flex_none().px(PAD + 2).gap(6).items_center()
+        .text_size(11).text_color(t.dim)
+        .child(svg(`${ICON}/${m ? "server" : "monitor"}.svg`).size(12).flex_none())
+        .child(div().flex_1().min_w(0).truncate().child(m ?? "This computer"))
+        .when(state !== "ready", (el) => el.child(div().flex_none().child(state === "loading" ? "loading…" : "offline")))
+        .when(state === "ready", (el) => el.child(div().id(`machine-new-${m ?? "local"}`).flex_none().px(4).rounded(4).tooltip(`New space on ${m ?? "this computer"}`)
+          .hover((h) => h.bg(t.hover).text_color(t.foreground)).on_click(() => run("space.new", { machine: m ?? "" })).child("+")))
+        .child(div().size(6).rounded(3).flex_none().bg(state === "ready" ? t.ansi2 : t.dim));
+      return v_flex().id(`machine-block-${m ?? "local"}`).flex_none().gap(1).when(m !== names[0], (el) => el.mt(6))
+        .child(head)
+        .child(v_flex().pl(MACHINE_INDENT).gap(0).children(mine));
+    });
   }
 }
