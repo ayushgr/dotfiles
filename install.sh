@@ -65,6 +65,9 @@ brew install --cask handy
 brew install --cask slack
 # Slack -> Initialize Logins + Nocturne Theme
 
+brew install --cask tailscale-app  # Mesh VPN; links Mac, Windows and phone for herdr
+# Tailscale -> Approve system extension + VPN, sign in, Settings -> Install CLI, Launch at login
+
 ###########################################################################
 # If needed per device
 # brew install --cask amphetamine
@@ -72,12 +75,7 @@ brew install --cask slack
 # brew install --cask vlc
 # brew install --cask mpv
 
-# Herdr - terminal multiplexer + agent runtime
-if ! command -v herdr &>/dev/null; then
-  curl -fsSL https://herdr.dev/install.sh | sh
-fi
-
-# Herdr desktop app - separate config (~/.config/herdr-app) and server from the TUI
+# Herdr desktop app (installs herdr-core)
 brew install --cask herdr-app
 # Herdr -> Settings -> select the Dotfiles theme
 
