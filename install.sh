@@ -75,9 +75,13 @@ brew install --cask tailscale-app  # Mesh VPN; links Mac, Windows and phone for 
 # brew install --cask vlc
 # brew install --cask mpv
 
-# Herdr desktop app (installs herdr-core)
+# Herdr desktop app. The cask does not include herdr-core (hc), the server the app runs on.
 brew install --cask herdr-app
+if ! command -v herdr-core &>/dev/null; then
+  curl -fsSL https://releases.herdr.dev/core/install.sh | sh
+fi
 # Herdr -> Settings -> select the Dotfiles theme
+# Herdr -> ctrl-shift-l until the dotfiles layout shows (first launch picks main)
 
 #####################################################################
 # Consider new Tools
