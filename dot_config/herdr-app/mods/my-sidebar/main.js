@@ -6,10 +6,12 @@
 // Header toggle: grouping on/off.
 // With more than one machine (this one plus any from `hc machine ls`), spaces sit under a header
 // per machine, indented; with one machine the list looks as it always did.
+// Sub-agents (terminals an agent started with `hc run`) sit indented under their parent,
+// whether or not they have a pane of their own.
 
 import { View, div, svg, image } from "gpui-kit";
 import { v_flex, h_flex } from "gpui-base";
-import { spaces, machines, agents, panes, run, openOverlay, exec, theme, shared, setShared, layout, checking, props, home } from "herdr";
+import { spaces, machines, agents, terminals, panes, run, openOverlay, exec, theme, shared, setShared, layout, checking, props, home } from "herdr";
 
 // Group lines are all the accent green: the active space's group full strength and wider,
 // the others faded. Theme colours are "#rrggbb"; anything else is used as is.
@@ -49,6 +51,19 @@ const base = (path) => path.replace(/\/+$/, "").split("/").pop() || path;
 
 // Drop a leading status glyph/spinner an agent puts before its title ("✳ Working").
 const cleanTitle = (s) => (s ?? "").replace(/^[^\p{L}\p{N}\[("'`]+/u, "").trim();
+
+// Live sub-agents of `addr`, depth first, with their depth under it (1 = direct child).
+function subTree(all, addr, depth = 1, seen = new Set([addr])) {
+  return all.filter((k) => k.parent === addr && k.state === "live" && !seen.has(k.address))
+    .flatMap((k) => { seen.add(k.address); return [{ k, depth }, ...subTree(all, k.address, depth + 1, seen)]; });
+}
+// A sub-agent without a pane isn't in agents(), so use its raw status, with error as blocked.
+// Its done isn't news (it reports to its parent), so it shows as idle. A sub-agent with a
+// pane is in agents() and keeps that status, done included.
+function subStatus(k, listed) {
+  if (listed.has(k.address)) return listed.get(k.address).status;
+  return k.status === "error" ? "blocked" : k.status === "done" ? "idle" : k.status;
+}
 
 export default class Sidebar extends View {
   init(_props, cx) {
@@ -190,6 +205,21 @@ export default class Sidebar extends View {
       .when(!working && Boolean(this.dot(a.status, t)), (el) => el.child(this.dot(a.status, t)));
   }
 
+  // A sub-agent under its parent's row, one level deeper per generation. Named by its
+  // hc name, since that's what the parent calls it. Click shows it (a peek if it has no pane).
+  subRow({ k, depth }, status, t) {
+    const p = k.program;
+    const working = status === "working";
+    const iconColors = { claude: "#D97757", codex: t.ansi4, opencode: t.muted };
+    const icon = working ? spinner(t)
+      : p?.icon ? (p.tint ? svg(p.icon).size(11).text_color(iconColors[p.key] ?? t.muted) : image(p.icon).size(11)) : null;
+    const title = k.name || k.template || cleanTitle(k.title) || p?.name || k.address;
+    return this.row(`sub-${k.address}`, 20, 1 + depth, icon, t).text_size(12)
+      .on_click(() => run("agent.focus", { terminal: k.address }))
+      .child(div().flex_1().min_w(0).truncate().text_color(working ? t.working : t.muted).child(title))
+      .when(!working && Boolean(this.dot(status, t)), (el) => el.child(this.dot(status, t)));
+  }
+
   // The header's label: how many agents need you, have finished, or are working, in their
   // status colours; empty when there's nothing to report. Plain text, so
   // the header still drags the window.
@@ -232,9 +262,16 @@ export default class Sidebar extends View {
     if (props()?.header) return narrow() ? div().size_full().bg(t.chrome) : this.header(t);
     if (narrow()) return this.rail(sp, t);
     const ps = panes();
-    const ags = agents();
+    const all = terminals();
+    const listed = new Map(agents().map((a) => [a.address, a]));
+    // Each agent's sub-agents. One that has a pane too (so it's in agents()) is shown under
+    // its parent only.
+    const subs = new Map([...listed.keys()].map((addr) => [addr, subTree(all, addr)]));
+    const nested = new Set([...subs.values()].flat().map((s) => s.k.address));
+    const ags = [...listed.values()].filter((a) => !nested.has(a.address));
     const bySpace = {};
     for (const a of ags) (bySpace[a.space] ??= []).push(a);
+    const statuses = (a) => [a.status, ...subs.get(a.address).map((s) => subStatus(s.k, listed))];
     const groups = this.groups(sp, ps);
     const grouped = shared("sidebar.grouping") !== "none";
     const blocks = [];
@@ -245,11 +282,14 @@ export default class Sidebar extends View {
         let row = this.spaceRow(r, t, sp);
         if (grouped && g.custom && ri === 0) row = row.child(div().flex_none().text_size(10.5).text_color(t.dim).child(g.name));
         rows.push(row);
-        for (const a of bySpace[r.s.id] ?? []) rows.push(this.agentRow(a, t));
+        for (const a of bySpace[r.s.id] ?? []) {
+          rows.push(this.agentRow(a, t));
+          for (const s of subs.get(a.address)) rows.push(this.subRow(s, subStatus(s.k, listed), t));
+        }
       });
       const line = grouped && g.key !== "other" && g.key !== "all";
       const current = g.rows.some((r) => r.s.active);
-      const busy = g.rows.some((r) => (bySpace[r.s.id] ?? []).some((a) => a.status === "working"));
+      const busy = g.rows.some((r) => (bySpace[r.s.id] ?? []).some((a) => statuses(a).includes("working")));
       const hueOf = busy ? t.working : t.accent;
       blocks.push(h_flex().id(`grp-${gi}`).items_stretch().gap(2).when(gi > 0 && grouped && groups[gi - 1].machine === g.machine, (el) => el.mt(4))
         .child(div().w(2).flex_none().rounded(2).my(2).bg(!line ? t.chrome : current ? hueOf : faded(hueOf)))
