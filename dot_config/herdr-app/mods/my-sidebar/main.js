@@ -206,8 +206,10 @@ export default class Sidebar extends View {
   }
 
   // A sub-agent under its parent's row, one level deeper per generation. Named by its
-  // hc name, since that's what the parent calls it. Click shows it (a peek if it has no pane).
-  subRow({ k, depth }, status, t) {
+  // hc name, since that's what the parent calls it. Click shows it: its pane if it has one,
+  // else a peek. Peek directly rather than through agent.focus, which skips terminals Herdr
+  // doesn't recognise as agents (e.g. `hc run zsh -c "codex exec …"` reads as a shell).
+  subRow({ k, depth }, status, hasPane, t) {
     const p = k.program;
     const working = status === "working";
     const iconColors = { claude: "#D97757", codex: t.ansi4, opencode: t.muted };
@@ -215,7 +217,7 @@ export default class Sidebar extends View {
       : p?.icon ? (p.tint ? svg(p.icon).size(11).text_color(iconColors[p.key] ?? t.muted) : image(p.icon).size(11)) : null;
     const title = k.name || k.template || cleanTitle(k.title) || p?.name || k.address;
     return this.row(`sub-${k.address}`, 20, 1 + depth, icon, t).text_size(12)
-      .on_click(() => run("agent.focus", { terminal: k.address }))
+      .on_click(() => run(hasPane ? "agent.focus" : "terminal.peek", { terminal: k.address }))
       .child(div().flex_1().min_w(0).truncate().text_color(working ? t.working : t.muted).child(title))
       .when(!working && Boolean(this.dot(status, t)), (el) => el.child(this.dot(status, t)));
   }
@@ -284,7 +286,7 @@ export default class Sidebar extends View {
         rows.push(row);
         for (const a of bySpace[r.s.id] ?? []) {
           rows.push(this.agentRow(a, t));
-          for (const s of subs.get(a.address)) rows.push(this.subRow(s, subStatus(s.k, listed), t));
+          for (const s of subs.get(a.address)) rows.push(this.subRow(s, subStatus(s.k, listed), listed.has(s.k.address), t));
         }
       });
       const line = grouped && g.key !== "other" && g.key !== "all";
