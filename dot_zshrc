@@ -71,6 +71,21 @@ setopt inc_append_history
 ###
 
 
+# Remap ANSI blue (4, 12) to the active theme's accent while running agy,
+# since agy's Terminal color scheme uses blue for its main UI chrome.
+agy() {
+  local color ret
+  if [[ -t 1 && -r ~/.gemini/antigravity-cli/theme-accent ]]; then
+    read -r color < ~/.gemini/antigravity-cli/theme-accent
+    if [[ -n $color ]]; then
+      printf '\e]4;4;%s\a\e]4;12;%s\a' "$color" "$color"
+      { command agy "$@"; ret=$?; } always { printf '\e]104;4\a\e]104;12\a' }
+      return $ret
+    fi
+  fi
+  command agy "$@"
+}
+
 # Device-specific interactive setup. Not version controlled.
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
 
